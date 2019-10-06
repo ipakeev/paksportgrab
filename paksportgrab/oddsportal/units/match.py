@@ -12,9 +12,8 @@ class Match(object):
     sport: str
     country: str
     league: str
-    season: str
-    countryId: int
     leagueId: int
+    season: str
     teams: list
     score: Optional[str]
     date: str
