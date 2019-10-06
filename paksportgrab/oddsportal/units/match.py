@@ -25,6 +25,8 @@ class Match(object):
     live: bool
     finished: bool
     canceled: bool
+    filledOdds: bool
+    filledScore: bool
 
     def setNotStarted(self):
         self.notStarted = True
@@ -106,3 +108,6 @@ class Match(object):
             self.bkNum = int(bkNum.text)
         except ValueError:
             self.bkNum = None
+
+        self.filledOdds = False
+        self.filledScore = False
