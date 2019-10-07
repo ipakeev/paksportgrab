@@ -1,29 +1,55 @@
+soccer = 'soccer'
+tennis = 'tennis'
+basketball = 'basketball'
+hockey = 'hockey'
+handball = 'handball'
+baseball = 'baseball'
+american_football = 'american-football'
+rugby_union = 'rugby-union'
+rugby_league = 'rugby-league'
+volleyball = 'volleyball'
+floorball = 'floorball'
+bandy = 'bandy'
+futsal = 'futsal'
+cricket = 'cricket'
+snooker = 'snooker'
+darts = 'darts'
+boxing = 'boxing'
+beach_volleyball = 'beach-volleyball'
+aussie_rules = 'aussie-rules'
+badminton = 'badminton'
+water_polo = 'water-polo'
+beach_soccer = 'beach-soccer'
+pesapallo = 'pesapallo'
+esports = 'esports'
+mma = 'mma'
+
 sportName = {
-    'Soccer': 'soccer',
-    'Tennis': 'tennis',
-    'Basketball': 'basketball',
-    'Hockey': 'hockey',
-    'Handball': 'handball',
-    'Baseball': 'baseball',
-    'American Football': 'american-football',
-    'Rugby Union': 'rugby-union',
-    'Rugby League': 'rugby-league',
-    'Volleyball': 'volleyball',
-    'Floorball': 'floorball',
-    'Bandy': 'bandy',
-    'Futsal': 'futsal',
-    'Cricket': 'cricket',
-    'Snooker': 'snooker',
-    'Darts': 'darts',
-    'Boxing': 'boxing',
-    'Beach Volleyball': 'beach-volleyball',
-    'Aussie Rules': 'aussie-rules',
-    'Badminton': 'badminton',
-    'Water polo': 'water-polo',
-    'Beach Soccer': 'beach-soccer',
-    'Pesäpallo': 'pesapallo',
-    'eSports': 'esports',
-    'MMA': 'mma',
+    'Soccer': soccer,
+    'Tennis': tennis,
+    'Basketball': basketball,
+    'Hockey': hockey,
+    'Handball': handball,
+    'Baseball': baseball,
+    'American Football': american_football,
+    'Rugby Union': rugby_union,
+    'Rugby League': rugby_league,
+    'Volleyball': volleyball,
+    'Floorball': floorball,
+    'Bandy': bandy,
+    'Futsal': futsal,
+    'Cricket': cricket,
+    'Snooker': snooker,
+    'Darts': darts,
+    'Boxing': boxing,
+    'Beach Volleyball': beach_volleyball,
+    'Aussie Rules': aussie_rules,
+    'Badminton': badminton,
+    'Water polo': water_polo,
+    'Beach Soccer': beach_soccer,
+    'Pesäpallo': pesapallo,
+    'eSports': esports,
+    'MMA': mma,
 }
 
 WDL = '1X2'
@@ -34,7 +60,7 @@ DNB = 'DNB'
 DC = 'DC'
 EH = 'EH'
 CS = 'CS'
-_More = 'More'
+MoreBets = 'More'
 
 tabName = {
     '1X2': WDL,
@@ -51,7 +77,7 @@ tabName = {
     'European Handicap': EH,
     'CS': CS,
     'Correct Score': CS,
-    'More bets': _More,
+    'More bets': MoreBets,
 }
 
 ft = 'ft'
@@ -79,16 +105,33 @@ subTabName = {
     '4Q': q4,
 }
 
+tabs = {
+    soccer: {
+        WDL: [ft, h1],
+        handicap: [ft, h1],
+        total: [ft, h1],
+    },
+    hockey: {
+        WDL: [ft, h1],
+        WL: [ftot],
+        handicap: [ftot, ft],
+        total: [ftot, ft, h1],
+    },
+    basketball: {
+        WL: [ftot],
+        handicap: [ftot],
+        total: [ftot, ft, h1, q1],
+    },
+    baseball: {
+        WL: [ftot],
+        handicap: [ftot, h1],
+        total: [ftot, h1, q1],
+    },
+}
+
 matchTableGrid = 'tableGrid'
 matchValueGrid = 'valueGrid'
 
-tabs = [WDL, WL, handicap, total]
-subTabs = {
-    WDL: [ft, h1, q1],
-    WL: [ftot, h1, q1],
-    handicap: [ftot, ft, h1, q1],
-    total: [ftot, ft, h1, q1],
-}
 tableOrValueGrid = {
     WDL: matchTableGrid,
     WL: matchTableGrid,

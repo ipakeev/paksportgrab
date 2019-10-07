@@ -65,29 +65,16 @@ def test_text(grabber: Grabber, match: Match):
 
 def test_grid(match: Match):
     assert match.odds[names.WDL][names.ft] == {'1': 1.79, 'X': 3.52, '2': 4.85, 'bkNum': 3}
-    with pytest.raises(KeyError):
-        assert match.odds[names.WDL][names.ftot] is None
     assert match.odds[names.WDL][names.h1] == {'1': 2.43, 'X': 2.11, '2': 5.43, 'bkNum': 3}
-    assert match.odds[names.WDL][names.q1] is None
-
-    with pytest.raises(KeyError):
-        assert match.odds[names.WL][names.ft] is None
-    assert match.odds[names.WL][names.ftot] is None
-    assert match.odds[names.WL][names.h1] is None
-    assert match.odds[names.WL][names.q1] is None
 
     assert match.odds[names.handicap][names.ft][0] == {'1': 1.3, '2': 3.43, 'bkNum': 3}
-    assert match.odds[names.handicap][names.ftot] is None
     assert match.odds[names.handicap][names.h1][-0.5] == {'1': 2.3, '2': 1.48, 'bkNum': 1}
-    assert match.odds[names.handicap][names.q1] is None
 
     assert len(match.odds[names.handicap][names.ft]) == 12
     assert len(match.odds[names.handicap][names.h1]) == 5
 
     assert match.odds[names.total][names.ft][2.5] == {'over': 2.25, 'under': 1.67, 'bkNum': 3}
-    assert match.odds[names.total][names.ftot] is None
     assert match.odds[names.total][names.h1][1] == {'over': 2.08, 'under': 1.75, 'bkNum': 1}
-    assert match.odds[names.total][names.q1] is None
 
     assert len(match.odds[names.total][names.ft]) == 11
     assert len(match.odds[names.total][names.h1]) == 5

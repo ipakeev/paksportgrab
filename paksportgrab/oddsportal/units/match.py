@@ -15,7 +15,8 @@ class Match(object):
     leagueId: int
     season: str
     teams: list
-    score: Optional[str]
+    scoreString: Optional[str]
+    score: Optional[dict]
     date: str
     time: str
     odds: Dict[str, Dict[str, dict]]
@@ -78,20 +79,21 @@ class Match(object):
             self.url = url[0]
         self.id = utils.getMatchId(self.url)
 
-        score = browser.findElementsFrom(pe, 'td.table-score')
-        if score:
-            assert len(score) == 1
-            score = score[0]
-            self.score = score.text
-            if self.score in names.cancelledTypes:
+        scoreString = browser.findElementsFrom(pe, 'td.table-score')
+        if scoreString:
+            assert len(scoreString) == 1
+            scoreString = scoreString[0]
+            self.scoreString = scoreString.text
+            if self.scoreString in names.cancelledTypes:
                 self.setCanceled()
-            elif 'live-score' in score.getAttribute('class'):
+            elif 'live-score' in scoreString.getAttribute('class'):
                 self.setLive()
             else:
                 self.setFinished()
         else:
-            self.score = None
+            self.scoreString = None
             self.setNotStarted()
+        self.score = None
 
         odds = browser.findElementsFrom(pe, 'td.odds-nowrp')
         odds = [i.text for i in odds]

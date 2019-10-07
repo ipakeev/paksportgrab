@@ -29,9 +29,6 @@ def catchWebDriverException(func):
     return wrapper
 
 
-
-
-
 class Grabber(object):
     browser: Browser
     user: User
@@ -135,16 +132,21 @@ class Grabber(object):
 
     @catchWebDriverException
     def fillMatch(self, match: Match):
+        if match.filledScore and match.filledOdds:
+            return
+        sport = match.sport
+        oddsTabs = names.tabs[sport]
+
         def getTabsNameList():
             current = self.matchGrid.getCurrentTabName()
-            if current in names.tabs:
-                return [current] + [i for i in names.tabs if (i != current and i in tabs)]
+            if current in oddsTabs:
+                return [current] + [i for i in oddsTabs.keys() if (i != current and i in tabs)]
             else:
-                return [i for i in names.tabs if i in tabs]
+                return [i for i in oddsTabs.keys() if i in tabs]
 
         def getSubTabsNameList():
             current = self.matchGrid.getCurrentSubTabName()
-            subTabsNameList = names.subTabs[tabName]
+            subTabsNameList = list(oddsTabs[tabName].keys())
             if current in subTabsNameList:
                 return [current] + [i for i in subTabsNameList if (i != current and i in subTabs)]
             else:
@@ -160,11 +162,20 @@ class Grabber(object):
                 empty=self.matchGrid.isEmpty, reload=self.matchGrid.isReload)
 
         match.date, match.time = self.matchGrid.getDateTime()
-        match.score = self.matchGrid.getResult()
-        for tabName in names.tabs:
-            match.odds[tabName] = {key: None for key in names.subTabs[tabName]}
+        match.scoreString = self.matchGrid.getResult()
+        match.score = None
+
+        if match.finished:
+            match.filledScore = True
+
+        if match.filledOdds:
+            return
+
+        for tabName in oddsTabs.keys():
+            match.odds[tabName] = {key: None for key in oddsTabs[tabName]}
 
         if self.matchGrid.isEmpty():
+            match.filledOdds = True
             return
 
         tabs = self.matchGrid.getTabs()
@@ -182,3 +193,5 @@ class Grabber(object):
                                        reload=self.matchGrid.isReload)
 
                 match.odds[tabName][subTabName] = self.matchGrid.grab(tabName)
+
+        match.filledOdds = True
