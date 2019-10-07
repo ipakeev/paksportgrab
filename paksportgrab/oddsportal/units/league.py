@@ -1,7 +1,10 @@
+import collections
 from typing import List, Optional
 
 from .border import Border
 from .match import Match
+
+SeasonDescribe = collections.namedtuple('SeasonDescribe', ['name', 'url'])
 
 
 class League(object):
@@ -11,7 +14,7 @@ class League(object):
     leagueId: Optional[int]
     leagueUrl: str
     nextMatches: List[Match]
-    seasons: List[str]
+    seasons: List[SeasonDescribe]
 
     def __init__(self, border: Border):
         self.sport = border.sport

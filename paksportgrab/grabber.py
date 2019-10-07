@@ -1,5 +1,4 @@
 import time
-import collections
 from typing import Optional, Union, List, Tuple, Callable
 from pakselenium import Browser
 from selenium.common.exceptions import WebDriverException
@@ -8,7 +7,7 @@ from .oddsportal.user import User
 from .oddsportal.sportGrid import SportGrid
 from .oddsportal.leagueGrid import LeagueGrid
 from .oddsportal.matchGrid import MatchGrid
-from .oddsportal.units.league import League
+from .oddsportal.units.league import League, SeasonDescribe
 from .oddsportal.units.match import Match
 from .oddsportal.config import names
 from .oddsportal import utils
@@ -30,7 +29,7 @@ def catchWebDriverException(func):
     return wrapper
 
 
-SeasonDescribe = collections.namedtuple('SeasonDescribe', ['name', 'url'])
+
 
 
 class Grabber(object):
