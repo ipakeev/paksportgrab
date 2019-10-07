@@ -87,7 +87,7 @@ class Grabber(object):
             return []
 
     @catchWebDriverException
-    def getMatches(self, leagueUrl: str, tillMatchId: str = None) -> List[Match]:
+    def getMatches(self, leagueUrl: str, tillMatchId: str = None, seasonsDepth=5) -> List[Match]:
         def isReachedSeason():
             if self.leagueGrid.isVisibleSeasonTabs():
                 return self.leagueGrid.getCurrentSeasonName() == seasonName
@@ -104,7 +104,9 @@ class Grabber(object):
         seasonsDict = {i.text: i for i in seasonElements}
         seasonNames = [i.text for i in seasonElements]  # new list because needs course of seasons
         startFrom = [i.getAttribute('href') for i in seasonElements].index(leagueUrl)
-        for seasonName in seasonNames[startFrom:]:
+        assert startFrom < seasonsDepth
+
+        for seasonName in seasonNames[startFrom:seasonsDepth]:
             season = seasonsDict[seasonName]
             if not isReachedSeason():
                 self.browser.click(season, until=(self.leagueGrid.isLoadedGrid, isReachedSeason),
@@ -134,19 +136,19 @@ class Grabber(object):
     def fillMatch(self, match: Match):
         if match.filledScore and match.filledOdds:
             return
-        sport = match.sport
-        oddsTabs = names.tabs[sport]
+        oddsTabs = names.tabs[match.sport]
 
         def getTabsNameList():
             current = self.matchGrid.getCurrentTabName()
-            if current in oddsTabs:
-                return [current] + [i for i in oddsTabs.keys() if (i != current and i in tabs)]
+            tabsNameList = list(oddsTabs.keys())
+            if current in tabsNameList:
+                return [current] + [i for i in tabsNameList if (i != current and i in tabs)]
             else:
-                return [i for i in oddsTabs.keys() if i in tabs]
+                return [i for i in tabsNameList if i in tabs]
 
         def getSubTabsNameList():
             current = self.matchGrid.getCurrentSubTabName()
-            subTabsNameList = list(oddsTabs[tabName].keys())
+            subTabsNameList = oddsTabs[tabName]
             if current in subTabsNameList:
                 return [current] + [i for i in subTabsNameList if (i != current and i in subTabs)]
             else:

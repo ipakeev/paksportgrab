@@ -63,7 +63,7 @@ class TestSportGrid:
         assert match.teams == ['Villa Clara', 'Sancti Spiritus']
         assert match.url == 'https://www.oddsportal.com/baseball/cuba/serie-nacional/villa-clara-sancti-spiritus-88bjyIXl/'
         assert match.id == '88bjyIXl'
-        assert match.score == '5:0'
+        assert match.scoreString == '5:0'
         assert match.odds == {'1X2': {'1': 2.17, '2': 1.64}}
         assert match.bkNum == 2
         assert match.finished

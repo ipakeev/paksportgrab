@@ -4,21 +4,26 @@ from paksportgrab.oddsportal.config import names
 
 
 class Match:
+    sport: str
     date: str
     time: str
-    score: str
-    leagueUrl: str
+    scoreString: str
     odds: dict
+    finished: bool = True
+    filledScore: bool = False
+    filledOdds: bool = False
 
-    def __init__(self, url):
+    def __init__(self, sport, url):
+        self.sport = sport
         self.url = url
-        self.odds = {}
+        self.odds = dict()
 
 
 @pytest.fixture(scope='module', autouse=True)
 def match(grabber: Grabber):
+    sport = 'soccer'
     url = 'https://www.oddsportal.com/soccer/argentina/superliga-2017-2018/tigre-patronato-pCQq96qD/'
-    m = Match(url)
+    m = Match(sport, url)
     grabber.fillMatch(m)
     return m
 
@@ -58,9 +63,9 @@ def test_text(grabber: Grabber, match: Match):
     assert match.date == date
     assert match.time == time
 
-    score = '1:3 (1:1, 0:2)'
-    assert grabber.matchGrid.getResult() == score
-    assert match.score == score
+    scoreString = '1:3 (1:1, 0:2)'
+    assert grabber.matchGrid.getResult() == scoreString
+    assert match.scoreString == scoreString
 
 
 def test_grid(match: Match):
