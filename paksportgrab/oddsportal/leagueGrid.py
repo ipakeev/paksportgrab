@@ -53,7 +53,7 @@ class LeagueGrid(Grid):
         return season
 
     def getSeasonTabs(self) -> List[PageElement]:
-        # ['NEXT MATCHES', 'RESULTS', 'STANDINGS', list of seasons]
+        # ['NEXT MATCHES', 'RESULTS', 'STANDINGS', 'OUTRIGHTS', list of seasons]
         pes = self.browser.findElements(leaguePage.navigation.seasons)
         seasons = [i for i in pes if i.text not in leaguePage.ignoreTabs]
 

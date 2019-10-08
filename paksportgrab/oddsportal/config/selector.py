@@ -43,7 +43,7 @@ class LeaguePage:
     SCL = '#breadcrumb > a'
     grid = '#tournamentTable > tbody > tr'
     gridElement = '#tournamentTable > tbody .odd'
-    ignoreTabs = ['NEXT MATCHES', 'RESULTS', 'STANDINGS']
+    ignoreTabs = ['NEXT MATCHES', 'RESULTS', 'STANDINGS', 'OUTRIGHTS']
     navigation = LeaguePageNavigation()
     msg = '.message-info'
 
