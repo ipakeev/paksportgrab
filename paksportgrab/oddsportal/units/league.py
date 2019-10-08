@@ -18,6 +18,7 @@ class League(object):
     seasons: List[SeasonDescribe]
 
     def __init__(self, border: Border):
+        self.allowed = True
         self.sport = border.sport
         self.country = border.country
         self.league = border.league
