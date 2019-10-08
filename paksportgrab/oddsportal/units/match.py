@@ -101,7 +101,7 @@ class Match(object):
         assert len(odds) == len(border.oddsType)
         odds = {t: odd for t, odd in zip(border.oddsType, odds)}
         self.odds = {
-            '1X2': odds,
+            names.WDL: odds,
         }
 
         bkNum = browser.findElementFrom(pe, 'td.info-value')

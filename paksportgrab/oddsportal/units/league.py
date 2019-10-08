@@ -8,6 +8,7 @@ SeasonDescribe = collections.namedtuple('SeasonDescribe', ['name', 'url'])
 
 
 class League(object):
+    allowed: bool
     sport: str
     country: str
     league: str

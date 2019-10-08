@@ -82,6 +82,8 @@ tabName = {
 
 ft = 'ft'
 ftot = 'ftot'
+ot = 'ot'
+innings = 'innings'
 h1 = 'I'
 h2 = 'II'
 h3 = 'III'

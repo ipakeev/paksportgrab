@@ -87,7 +87,7 @@ class Grabber(object):
             return []
 
     @catchWebDriverException
-    def getMatches(self, leagueUrl: str, tillMatchId: str = None, seasonsDepth=5) -> List[Match]:
+    def getMatches(self, leagueUrl: str, tillMatchId: str = None, seasonsDepth: int = 5) -> List[Match]:
         def isReachedSeason():
             if self.leagueGrid.isVisibleSeasonTabs():
                 return self.leagueGrid.getCurrentSeasonName() == seasonName
