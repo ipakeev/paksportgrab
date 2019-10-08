@@ -9,6 +9,7 @@ SeasonDescribe = collections.namedtuple('SeasonDescribe', ['name', 'url'])
 
 class League(object):
     allowed: bool
+    skip: False
     sport: str
     country: str
     league: str
@@ -19,6 +20,7 @@ class League(object):
 
     def __init__(self, border: Border):
         self.allowed = True
+        self.skip = False
         self.sport = border.sport
         self.country = border.country
         self.league = border.league
