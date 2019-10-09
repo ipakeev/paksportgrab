@@ -20,6 +20,7 @@ def catchWebDriverException(func):
                 return func(self, *args, **kwargs)
             except WebDriverException:
                 # when browser is closed
+                print('>!> new session')
                 self.newBrowserSession()
             except Exception as e:
                 print(func, args, kwargs)

@@ -31,7 +31,6 @@ class LeagueGrid(Grid):
     def __init__(self, browser: Browser):
         super().__init__()
         self.browser = browser
-        self.msgSelector = leaguePage.msg
 
     def getSCL(self) -> Tuple[str, str, str]:
         # ['/', sport, country, league]
@@ -71,7 +70,7 @@ class LeagueGrid(Grid):
         for row in self.browser.findElements(leaguePage.grid):
             cl = row.getAttribute('class')
             if 'deactivate' in cl:  # матч
-                m = Match(self.browser, border, row)
+                m = Match().parse(self.browser, border, row)
                 if m.bkNum is None:
                     print('>!> invalid bk odds: {}'.format(self.browser.currentUrl))
                     raise ValueError

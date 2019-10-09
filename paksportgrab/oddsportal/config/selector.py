@@ -24,8 +24,7 @@ class SportPage:
     eventsTab = '#sort_events > a'
     grid = '#table-matches > table > tbody > tr'
     gridElement = '#table-matches > table > tbody > tr.odd'
-    msg = '.message-info'
-    error = '#col-content > h1'
+    error = '#col-content > h1'  # ????
 
 
 class LeaguePageNavigation:
@@ -45,7 +44,6 @@ class LeaguePage:
     gridElement = '#tournamentTable > tbody .odd'
     ignoreTabs = ['NEXT MATCHES', 'RESULTS', 'STANDINGS', 'OUTRIGHTS']
     navigation = LeaguePageNavigation()
-    msg = '.message-info'
 
 
 class MatchPage:
@@ -65,7 +63,11 @@ class MatchPage:
     tableGridBorder = '#odds-data-table > div > table > thead > tr > th.center'
     tableGridElement = '#odds-data-table > div > table > tfoot > tr.aver > td.right'
     tableGridBkNum = '#odds-data-table > div > table > tbody > tr.lo'
-    msg = '.message-info'
+
+
+class Message:
+    msg = '.message-info'  # 'No data available', 'try again' in msg
+    internetError = '#main-message > h1 > span'  # 'Нет подключения к Интернету'
 
 
 reCompiled = ReCompiled()
@@ -73,3 +75,4 @@ userPage = UserPage()
 sportPage = SportPage()
 leaguePage = LeaguePage()
 matchPage = MatchPage()
+message = Message()

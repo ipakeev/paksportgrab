@@ -31,7 +31,6 @@ class SportGrid(Grid):
     def __init__(self, browser: Browser):
         super().__init__()
         self.browser = browser
-        self.msgSelector = sportPage.msg
 
     def getCurrentDate(self) -> str:
         pe = self.browser.findElement(sportPage.date)
@@ -69,7 +68,7 @@ class SportGrid(Grid):
         for row in self.browser.findElements(sportPage.grid):
             cl = row.getAttribute('class')
             if 'deactivate' in cl or cl == 'odd' or cl == '':  # матч
-                m = Match(self.browser, border, row)
+                m = Match().parse(self.browser, border, row)
                 sport.addMatch(border, m)
             elif 'dark center' in cl:  # страна, лига
                 border.update(self.browser, row)

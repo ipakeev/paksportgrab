@@ -27,6 +27,7 @@ class League(object):
         self.leagueId = None
         self.leagueUrl = border.leagueUrl
         self.nextMatches = []
+        self.seasons = []
 
     def setToMatch(self, m):
         m.sport = self.sport

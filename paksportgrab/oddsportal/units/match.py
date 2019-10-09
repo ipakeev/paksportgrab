@@ -61,7 +61,7 @@ class Match(object):
             d[name] = attr
         return d
 
-    def __init__(self, browser: Browser, border: Border, pe: PageElement):
+    def parse(self, browser: Browser, border: Border, pe: PageElement):
         self.date = border.date
 
         time = browser.findElementFrom(pe, 'td.table-time')
@@ -112,3 +112,5 @@ class Match(object):
 
         self.filledOdds = False
         self.filledScore = False
+
+        return self

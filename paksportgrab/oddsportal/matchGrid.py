@@ -31,7 +31,6 @@ class MatchGrid(Grid):
     def __init__(self, browser: Browser):
         super().__init__()
         self.browser = browser
-        self.msgSelector = matchPage.msg
 
     def getSCL(self) -> Tuple[str, str, str]:
         # ['/', sport, country, league]
