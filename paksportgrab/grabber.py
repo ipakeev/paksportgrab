@@ -1,7 +1,7 @@
 import time
 from typing import Optional, Union, List, Tuple, Callable
 from pakselenium import Browser
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import WebDriverException, StaleElementReferenceException
 
 from .oddsportal.user import User
 from .oddsportal.sportGrid import SportGrid
@@ -13,11 +13,14 @@ from .oddsportal.config import names
 from .oddsportal import utils
 
 
-def catchWebDriverException(func):
+def catchExceptions(func):
     def wrapper(self, *args, **kwargs):
         while 1:
             try:
                 return func(self, *args, **kwargs)
+            except StaleElementReferenceException:
+                # when click was wrong
+                pass
             except WebDriverException:
                 # when browser is closed
                 print('>!> new session')
@@ -63,7 +66,7 @@ class Grabber(object):
                 break
             self.user.login()
 
-    @catchWebDriverException
+    @catchExceptions
     def getLeagues(self, sport: str, date: str) -> Optional[List[League]]:
         url = utils.getDateSportUrl(sport, date)
 
@@ -76,7 +79,7 @@ class Grabber(object):
         self.sportGrid.switchToEvents()
         return self.sportGrid.grab()
 
-    @catchWebDriverException
+    @catchExceptions
     def getSeasons(self, leagueUrl: str) -> List[SeasonDescribe]:
         self.go(leagueUrl, until=self.leagueGrid.isLoadedGrid,
                 empty=self.leagueGrid.isEmpty, reload=self.leagueGrid.isReload)
@@ -87,7 +90,7 @@ class Grabber(object):
         else:
             return []
 
-    @catchWebDriverException
+    @catchExceptions
     def getMatches(self, leagueUrl: str, tillMatchId: str = None, seasonsDepth: int = 5) -> List[Match]:
         def isReachedSeason():
             if self.leagueGrid.isVisibleSeasonTabs():
@@ -102,16 +105,16 @@ class Grabber(object):
             return matches
 
         seasonElements = self.leagueGrid.getSeasonTabs()
-        seasonsDict = {i.text: i for i in seasonElements}
+        seasonsUrls = {i.text: i.getAttribute('href') for i in seasonElements}
         seasonNames = [i.text for i in seasonElements]  # new list because needs course of seasons
         startFrom = [i.getAttribute('href') for i in seasonElements].index(leagueUrl)
         assert startFrom < seasonsDepth
 
         for seasonName in seasonNames[startFrom:seasonsDepth]:
-            season = seasonsDict[seasonName]
+            url = seasonsUrls[seasonName]
             if not isReachedSeason():
-                self.browser.click(season, until=(self.leagueGrid.isLoadedGrid, isReachedSeason),
-                                   empty=self.leagueGrid.isEmpty, reload=self.leagueGrid.isReload)
+                self.browser.go(url, until=(self.leagueGrid.isLoadedGrid, isReachedSeason),
+                                empty=self.leagueGrid.isEmpty, reload=self.leagueGrid.isReload)
 
             if not self.leagueGrid.isEmpty():
                 while 1:
@@ -129,11 +132,11 @@ class Grabber(object):
                     self.leagueGrid.nextPage()
 
             seasonElements = self.leagueGrid.getSeasonTabs()
-            seasonsDict = {i.text: i for i in seasonElements}
+            seasonsUrls = {i.text: i.getAttribute('href') for i in seasonElements}
 
         return matches
 
-    @catchWebDriverException
+    @catchExceptions
     def fillMatch(self, match: Match):
         if match.filledScore and match.filledOdds:
             return

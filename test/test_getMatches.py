@@ -115,8 +115,8 @@ class TestTillPage3:
         assert match.url == 'https://www.oddsportal.com/soccer/argentina/superliga-2017-2018/gimnasia-l-p-newells-old-boys-QVBrfakT/'
         assert match.id == 'QVBrfakT'
         assert match.scoreString == '2:0'
-        assert match.odds == {'1X2': {'1': 2.73, 'X': 3.05, '2': 2.75}}
-        assert match.bkNum == 3
+        assert match.odds == {'1X2': {'1': 2.61, 'X': 3.05, '2': 2.85}}
+        assert match.bkNum == 14
         assert match.finished
 
     def test_lastMatch(self, matches_tillPage3: List[Match]):
@@ -129,8 +129,8 @@ class TestTillPage3:
         assert match.url == 'https://www.oddsportal.com/soccer/argentina/superliga-2017-2018/velez-sarsfield-river-plate-xGt8WUHH/'
         assert match.id == 'xGt8WUHH'
         assert match.scoreString == '1:0'
-        assert match.odds == {'1X2': {'1': 3.2, 'X': 3.22, '2': 2.35}}
-        assert match.bkNum == 3
+        assert match.odds == {'1X2': {'1': 3.16, 'X': 3.18, '2': 2.31}}
+        assert match.bkNum == 14
         assert match.finished
 
 

@@ -153,8 +153,8 @@ class MatchGrid(Grid):
         # ['Bookmakers', '1', 'X', '2', 'Payout']
         # ['Bookmakers', '1', '2', 'Payout']
         pes = self.browser.findElements(matchPage.tableGridBorder)
-        *oddsKeys, payout = [i.text for i in pes if i.text]
-        assert payout == 'Payout'
+        texts = [i.text for i in pes if i.text]
+        oddsKeys = texts[:texts.index('Payout')]
         assert 2 <= len(oddsKeys) <= 3
 
         pes = self.browser.findElements(matchPage.tableGridElement)

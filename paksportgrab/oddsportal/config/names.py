@@ -99,7 +99,7 @@ subTabName = {
     '1st Period': h1,
     '2nd Half': h2,
     '2nd Period': h2,
-    '3d Period': h3,
+    '3rd Period': h3,
     '1Q': q1,
     '1st Inning': q1,
     '2Q': q2,

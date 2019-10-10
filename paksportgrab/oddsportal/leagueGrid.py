@@ -92,8 +92,9 @@ class LeagueGrid(Grid):
                 return current in self.getNavigationButtons()
 
         current = self.browser.findElement(leaguePage.navigation.currentPage).text
-        buttons = self.getNavigationButtons()
-        self.browser.click(buttons[leaguePage.navigation.nextButton], until=(self.isLoadedGrid, isGotNext))
+        btn = self.getNavigationButtons()[leaguePage.navigation.nextButton]
+        url = btn.getAttribute('href')
+        self.browser.go(url, until=(self.isLoadedGrid, isGotNext), empty=self.isEmpty, reload=self.isReload)
 
     def isEndOfSeason(self) -> bool:
         if not self.isVisibleNavigationButtons():
