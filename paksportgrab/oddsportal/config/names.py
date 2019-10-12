@@ -59,6 +59,7 @@ handicap = 'handicap'
 DNB = 'DNB'
 DC = 'DC'
 EH = 'EH'
+HTFT = 'HTFT'
 CS = 'CS'
 MoreBets = 'More'
 
@@ -75,6 +76,8 @@ tabName = {
     'Double Chance': DC,
     'EH': EH,
     'European Handicap': EH,
+    'HT/FT': HTFT,
+    'Half Time / Full Time': HTFT,
     'CS': CS,
     'Correct Score': CS,
     'More bets': MoreBets,

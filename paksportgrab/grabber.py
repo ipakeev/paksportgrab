@@ -15,6 +15,7 @@ from .oddsportal import utils
 
 def catchExceptions(func):
     def wrapper(self, *args, **kwargs):
+        crash = 0
         while 1:
             try:
                 return func(self, *args, **kwargs)
@@ -23,8 +24,11 @@ def catchExceptions(func):
                 pass
             except WebDriverException:
                 # when browser is closed
-                print('>!> new session')
-                self.newBrowserSession()
+                crash += 1
+                if crash == 5:
+                    print('>!> new session')
+                    self.newBrowserSession()
+                    crash = 0
             except Exception as e:
                 print(func, args, kwargs)
                 raise e
