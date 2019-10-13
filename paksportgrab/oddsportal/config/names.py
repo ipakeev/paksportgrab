@@ -62,14 +62,16 @@ EH = 'EH'
 HTFT = 'HTFT'
 CS = 'CS'
 MoreBets = 'More'
+BTS = 'BTS'
+OE = 'OE'
 
 tabName = {
     '1X2': WDL,
     'Home/Away': WL,
-    'Over/Under': total,
     'O/U': total,
-    'Asian Handicap': handicap,
+    'Over/Under': total,
     'AH': handicap,
+    'Asian Handicap': handicap,
     'DNB': DNB,
     'Draw No Bet': DNB,
     'DC': DC,
@@ -81,6 +83,10 @@ tabName = {
     'CS': CS,
     'Correct Score': CS,
     'More bets': MoreBets,
+    'BTS': BTS,
+    'Both Teams to Score': BTS,
+    'O/E': OE,
+    'Odd or Even': OE,
 }
 
 ft = 'ft'

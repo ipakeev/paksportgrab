@@ -59,7 +59,7 @@ class MatchGrid(Grid):
     def getCurrentTabName(self) -> str:
         if self.browser.isOnPage(matchPage.moreTab):
             pe = self.browser.findElement(matchPage.moreTab)
-            if pe.text == 'More bets':
+            if not pe.text or pe.text == 'More bets':
                 pe = self.browser.findElement(matchPage.currentTab)
         else:
             pe = self.browser.findElement(matchPage.currentTab)
@@ -149,7 +149,7 @@ class MatchGrid(Grid):
         return oddsDict
 
     @catchExceptions
-    def grabTableGrid(self) -> dict:
+    def grabTableGrid(self) -> Optional[dict]:
         # ['Bookmakers', '1', 'X', '2', 'Payout']
         # ['Bookmakers', '1', '2', 'Payout']
         pes = self.browser.findElements(matchPage.tableGridBorder)
@@ -159,8 +159,10 @@ class MatchGrid(Grid):
 
         pes = self.browser.findElements(matchPage.tableGridElement)
         odds = [i.text for i in pes]
-        odds = [float(i) if i else 1.0 for i in odds]
+        odds = [float(i) if (i and i != '-') else 1.0 for i in odds]
         assert len(oddsKeys) == len(odds)
+        if set(odds) == {1.0}:  # if [1.0, 1.0]
+            return None
 
         bkNum = len(self.browser.findElements(matchPage.tableGridBkNum))
 

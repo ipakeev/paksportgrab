@@ -61,6 +61,11 @@ class Match(object):
             d[name] = attr
         return d
 
+    def load(self, attrs: dict):
+        for name, value in attrs.items():
+            self.__setattr__(name, value)
+        return self
+
     def parse(self, browser: Browser, border: Border, pe: PageElement):
         self.date = border.date
 
