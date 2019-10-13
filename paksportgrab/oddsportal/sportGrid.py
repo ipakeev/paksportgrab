@@ -39,7 +39,7 @@ class SportGrid(Grid):
     def getCurrentSport(self) -> str:
         if self.browser.isOnPage(sportPage.moreSport):  # for sport in hidden tab
             pe = self.browser.findElement(sportPage.moreSport)
-            if pe.text == 'More':
+            if not pe.text or pe.text == 'More':
                 pe = self.browser.findElement(sportPage.currentSport)
         else:
             pe = self.browser.findElement(sportPage.currentSport)
