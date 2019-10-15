@@ -182,7 +182,7 @@ class Grabber(object):
             return
 
         for tabName in oddsTabs.keys():
-            match.odds[tabName] = {key: None for key in oddsTabs[tabName]}
+            match.odds[tabName] = {subTabName: None for subTabName in oddsTabs[tabName]}
 
         if self.matchGrid.isEmpty():
             match.filledOdds = True

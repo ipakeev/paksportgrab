@@ -64,6 +64,7 @@ CS = 'CS'
 MoreBets = 'More'
 BTS = 'BTS'
 OE = 'OE'
+TQ = 'TQ'
 
 tabName = {
     '1X2': WDL,
@@ -87,6 +88,8 @@ tabName = {
     'Both Teams to Score': BTS,
     'O/E': OE,
     'Odd or Even': OE,
+    'TQ': TQ,
+    'To Qualify': TQ,
 }
 
 ft = 'ft'
@@ -119,7 +122,7 @@ subTabName = {
 tabs = {
     soccer: {
         WDL: [ft, h1],
-        handicap: [ft, h1],
+        handicap: [ft],
         total: [ft, h1],
     },
     hockey: {
@@ -135,7 +138,7 @@ tabs = {
     },
     baseball: {
         WL: [ftot],
-        handicap: [ftot, h1],
+        handicap: [ftot],
         total: [ftot, h1, q1],
     },
 }
