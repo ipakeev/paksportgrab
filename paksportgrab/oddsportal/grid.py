@@ -19,8 +19,6 @@ class Grid(object):
             msg = self.browser.findElement(message.internetError).text
             if msg == 'Нет подключения к Интернету':
                 return True
-            else:
-                print('internetError: {} : {}'.format(msg, self.browser.currentUrl))
         return False
 
     def isEmpty(self) -> bool:
