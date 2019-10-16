@@ -26,7 +26,7 @@ class Sport(object):
             if self.isEqual(border, league):
                 return league
 
-        league = League(border)
+        league = League().parse(border)
         self.leagues.append(league)
         return league
 

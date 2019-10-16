@@ -18,7 +18,7 @@ class League(object):
     nextMatches: List[Match]
     seasons: List[SeasonDescribe]
 
-    def __init__(self, border: Border):
+    def parse(self, border: Border):
         self.allowed = True
         self.skip = False
         self.sport = border.sport
@@ -28,6 +28,8 @@ class League(object):
         self.leagueUrl = border.leagueUrl
         self.nextMatches = []
         self.seasons = []
+
+        return self
 
     def setToMatch(self, m):
         m.sport = self.sport
