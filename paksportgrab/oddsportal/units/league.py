@@ -8,7 +8,6 @@ SeasonDescribe = collections.namedtuple('SeasonDescribe', ['name', 'url'])
 
 
 class League(object):
-    allowed: bool
     skip: False
     sport: str
     country: str
@@ -16,10 +15,8 @@ class League(object):
     leagueId: Optional[int]
     leagueUrl: str
     nextMatches: List[Match]
-    seasons: List[SeasonDescribe]
 
     def parse(self, border: Border):
-        self.allowed = True
         self.skip = False
         self.sport = border.sport
         self.country = border.country
@@ -27,7 +24,6 @@ class League(object):
         self.leagueId = None
         self.leagueUrl = border.leagueUrl
         self.nextMatches = []
-        self.seasons = []
 
         return self
 

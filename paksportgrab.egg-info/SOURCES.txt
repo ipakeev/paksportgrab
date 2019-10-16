@@ -2,6 +2,7 @@ README.txt
 setup.py
 paksportgrab/__init__.py
 paksportgrab/grabber.py
+paksportgrab.egg-info/.gitignore
 paksportgrab.egg-info/PKG-INFO
 paksportgrab.egg-info/SOURCES.txt
 paksportgrab.egg-info/dependency_links.txt
