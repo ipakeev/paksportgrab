@@ -8,7 +8,7 @@ from . import credentials
 @pytest.fixture(scope='session')
 def browser() -> Browser:
     b = Browser()
-    b.initChrome('C:/python/driver/chromedriver.exe', headless=True)
+    b.initChrome('C:/python/driver/chromedriver.exe')
     return b
 
 
