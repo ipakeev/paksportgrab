@@ -73,10 +73,7 @@ def test_grid(match: Match):
     assert match.odds[names.WDL][names.h1] == {'1': 2.42, 'X': 2.04, '2': 5.04, 'bkNum': 11}
 
     assert match.odds[names.handicap][names.ft][0] == {'1': 1.3, '2': 3.53, 'bkNum': 7}
-    assert match.odds[names.handicap][names.h1][-0.5] == {'1': 2.41, '2': 1.56, 'bkNum': 3}
-
     assert len(match.odds[names.handicap][names.ft]) == 18
-    assert len(match.odds[names.handicap][names.h1]) == 5
 
     assert match.odds[names.total][names.ft][2.5] == {'over': 2.22, 'under': 1.65, 'bkNum': 12}
     assert match.odds[names.total][names.h1][1] == {'over': 2.18, 'under': 1.68, 'bkNum': 4}
