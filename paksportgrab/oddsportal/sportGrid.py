@@ -70,6 +70,8 @@ class SportGrid(Grid):
             if 'deactivate' in cl or cl == 'odd' or cl == '':  # матч
                 m = Match().parse(self.browser, border, row)
                 sport.addMatch(border, m)
+            elif cl == 'center nob-border':  # иногда выскакивает, если матчи будут скоро
+                continue
             elif 'dark center' in cl:  # страна, лига
                 border.update(self.browser, row)
             else:
