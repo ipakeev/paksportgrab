@@ -26,6 +26,8 @@ class Grid(object):
         if msg:
             if msg == 'No data available':
                 return True
+            elif msg == 'There are no odds available for this event.':
+                return True
             elif 'try again' in self.msg:
                 return False
             else:
