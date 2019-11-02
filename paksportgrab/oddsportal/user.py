@@ -18,8 +18,14 @@ class User(object):
         self.password = password
 
     def isLoggedIn(self):
+        def untilLoginBtn():
+            return self.browser.isOnPage(userPage.loginBtn)
+
+        def untilLogoutBtn():
+            return self.browser.isOnPage(userPage.logoutBtn)
+
         if names.baseUrl not in self.browser.currentUrl:
-            self.browser.go(names.baseUrl)
+            self.browser.go(names.baseUrl, untilOr=(untilLoginBtn, untilLogoutBtn))
 
         if self.browser.isOnPage(userPage.logoutBtn):
             return True
@@ -39,7 +45,7 @@ class User(object):
         cookies = ioutils.loadPickle(cookiePath)
         if cookies:
             self.browser.setCookies(cookies)
-            self.browser.refresh()
+            self.browser.refresh(untilOr=(untilLoginBtn, untilLogoutBtn))
             if self.isLoggedIn():
                 return
 
