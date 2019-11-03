@@ -100,14 +100,15 @@ class Match(object):
             self.setNotStarted()
         self.score = None
 
-        odds = browser.findElementsFrom(pe, 'td.odds-nowrp')
-        odds = [i.text for i in odds]
-        odds = [float(i) if i != '-' else None for i in odds]
-        assert len(odds) == len(border.oddsType)
-        odds = {t: odd for t, odd in zip(border.oddsType, odds)}
-        self.odds = {
-            names.WDL: odds,
-        }
+        # odds = browser.findElementsFrom(pe, 'td.odds-nowrp')
+        # odds = [i.text for i in odds]
+        # odds = [float(i) if i != '-' else None for i in odds]
+        # assert len(odds) == len(border.oddsType)
+        # odds = {t: odd for t, odd in zip(border.oddsType, odds)}
+        # self.odds = {
+        #     names.WDL: odds,
+        # }
+        self.odds = {}
 
         bkNum = browser.findElementFrom(pe, 'td.info-value')
         try:

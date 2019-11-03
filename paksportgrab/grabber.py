@@ -1,4 +1,5 @@
 import time
+import re
 from typing import Optional, Union, List, Tuple, Callable
 from pakselenium import Browser
 from selenium.common.exceptions import WebDriverException, StaleElementReferenceException
@@ -95,7 +96,8 @@ class Grabber(object):
             return []
 
     @catchExceptions
-    def getMatches(self, leagueUrl: str, tillMatchId: str = None, seasonsDepth: int = 5) -> List[Match]:
+    def getMatches(self, leagueUrl: str, tillMatchId: str = None,
+                   seasonsDepth: int = 5, seasonMin='2014') -> List[Match]:
         def isReachedSeason():
             if self.leagueGrid.isVisibleSeasonTabs():
                 return self.leagueGrid.getCurrentSeasonName() == seasonName
@@ -111,10 +113,13 @@ class Grabber(object):
         seasonElements = self.leagueGrid.getSeasonTabs()
         seasonsUrls = {i.text: i.getAttribute('href') for i in seasonElements}
         seasonNames = [i.text for i in seasonElements]  # new list because needs course of seasons
-        startFrom = [i.getAttribute('href') for i in seasonElements].index(leagueUrl)
-        assert startFrom < seasonsDepth
+        start = [i.getAttribute('href') for i in seasonElements].index(leagueUrl)
+        assert start < seasonsDepth
+        seasonNames = seasonNames[start:seasonsDepth]
 
-        for seasonName in seasonNames[startFrom:seasonsDepth]:
+        for seasonName in seasonNames:
+            if re.findall(r'(\d{4})', seasonName)[0] < seasonMin:
+                continue
             url = seasonsUrls[seasonName]
             if not isReachedSeason():
                 self.browser.go(url, until=(self.leagueGrid.isLoadedGrid, isReachedSeason),

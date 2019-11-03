@@ -114,7 +114,11 @@ class MatchGrid(Grid):
     def grabValueGrid(self) -> dict:
         # ['Handicap', 'Payout', 'Under', 'Over']
         pes = self.browser.findElements(matchPage.valueGridBorder)
-        handicap, payout, *oddsKeys = [i.text for i in pes if i.text]
+        texts = [i.text for i in pes if i.text]
+        if not texts:
+            return {}
+
+        handicap, payout, *oddsKeys = texts
         assert handicap == 'Handicap'
         assert payout == 'Payout'
         assert len(oddsKeys) == 2
@@ -154,6 +158,9 @@ class MatchGrid(Grid):
         # ['Bookmakers', '1', '2', 'Payout']
         pes = self.browser.findElements(matchPage.tableGridBorder)
         texts = [i.text for i in pes if i.text]
+        if not texts:
+            return {}
+
         oddsKeys = texts[:texts.index('Payout')]
         assert 2 <= len(oddsKeys) <= 3
 
