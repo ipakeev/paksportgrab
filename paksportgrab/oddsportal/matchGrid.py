@@ -113,6 +113,7 @@ class MatchGrid(Grid):
     @catchExceptions
     def grabValueGrid(self) -> dict:
         # ['Handicap', 'Payout', 'Under', 'Over']
+        # ['Handicap', 'Payout', '2', '1']
         pes = self.browser.findElements(matchPage.valueGridBorder)
         texts = [i.text for i in pes if i.text]
         if not texts:
