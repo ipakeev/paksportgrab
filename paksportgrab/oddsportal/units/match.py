@@ -28,6 +28,11 @@ class Match(object):
     filledOdds: bool
     filledScore: bool
 
+    data: dict
+    scoreName: str
+    totBk: float
+    hpBk: float
+
     def setNotStarted(self):
         self.notStarted = True
         self.live = False
