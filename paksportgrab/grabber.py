@@ -180,7 +180,8 @@ class Grabber(object):
         match.scoreString = self.matchGrid.getResult()
         match.score = None
 
-        if match.finished:
+        if match.scoreString:
+            match.setFinished()
             match.filledScore = True
 
         if match.filledOdds:
