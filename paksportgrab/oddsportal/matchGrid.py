@@ -40,7 +40,9 @@ class MatchGrid(Grid):
 
     def getTeams(self) -> List[str]:
         pe = self.browser.findElement(matchPage.teams)
-        return pe.text.split(' - ')
+        teams = pe.text.split(' - ')
+        assert all([i for i in teams])
+        return teams
 
     def getDateTime(self) -> Tuple[str, str]:
         pe = self.browser.findElement(matchPage.date)
