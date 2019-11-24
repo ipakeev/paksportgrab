@@ -146,7 +146,7 @@ class Grabber(object):
         return matches
 
     @catchExceptions
-    def fillMatch(self, match: Match):
+    def fillMatch(self, match: Match, fillFinished=False):
         if match.filledScore and match.filledOdds:
             return
         oddsTabs = names.tabs[match.sport]
@@ -183,6 +183,9 @@ class Grabber(object):
         if match.scoreString:
             match.setFinished()
             match.filledScore = True
+
+        if fillFinished and not match.finished:
+            return
 
         if match.filledOdds:
             return
