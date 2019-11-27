@@ -1,5 +1,6 @@
 from typing import Dict, Optional
 from pakselenium.browser import Browser, PageElement
+from selenium.webdriver.common.by import By
 
 from .border import Border
 from .. import utils
@@ -74,12 +75,12 @@ class Match(object):
     def parse(self, browser: Browser, border: Border, pe: PageElement):
         self.date = border.date
 
-        time = browser.findElementFrom(pe, 'td.table-time')
+        time = browser.findElementFrom(pe, (By.CSS_SELECTOR, 'td.table-time'))
         self.time = time.text
 
-        teams = browser.findElementFrom(pe, 'td.name')
+        teams = browser.findElementFrom(pe, (By.CSS_SELECTOR, 'td.name'))
         self.teams = teams.text.split(' - ')
-        url = browser.findElementsFrom(teams, 'a')
+        url = browser.findElementsFrom(teams, (By.CSS_SELECTOR, 'a'))
         url = [i.getAttribute('href') for i in url]
         if len(url) == 1:
             self.url = url[0]
@@ -89,7 +90,7 @@ class Match(object):
             self.url = url[0]
         self.id = utils.getMatchId(self.url)
 
-        scoreString = browser.findElementsFrom(pe, 'td.table-score')
+        scoreString = browser.findElementsFrom(pe, (By.CSS_SELECTOR, 'td.table-score'))
         if scoreString:
             assert len(scoreString) == 1
             scoreString = scoreString[0]
@@ -115,7 +116,7 @@ class Match(object):
         # }
         self.odds = {}
 
-        bkNum = browser.findElementFrom(pe, 'td.info-value')
+        bkNum = browser.findElementFrom(pe, (By.CSS_SELECTOR, 'td.info-value'))
         try:
             self.bkNum = int(bkNum.text)
         except ValueError:

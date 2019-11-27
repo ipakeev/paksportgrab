@@ -1,5 +1,6 @@
 import time
 import re
+from functools import partial
 from typing import Optional, Union, List, Tuple, Callable
 from pakselenium import Browser
 from selenium.common.exceptions import WebDriverException, StaleElementReferenceException
@@ -38,6 +39,35 @@ def catchExceptions(func):
     return wrapper
 
 
+class isReachedUrl:
+    def __init__(self, url: str):
+        self.url = url
+
+    def __call__(self, driver):
+        if '/#/page/' in driver.current_url:
+            return self.url == driver.current_url
+
+        current = self.splitUrl(driver.current_url)
+        if len(current) > 5:
+            # target = ['https', domain, sport, country, league, match]
+            target = self.splitUrl(self.url)
+            # sometimes league name is different
+            if current[:4] == target[:4] and current[5:] == target[5:]:
+                return True
+            else:
+                return False
+
+        return self.url == driver.current_url
+
+    @staticmethod
+    def splitUrl(url: str) -> List[str]:
+        url = url.split('/')
+        stop = [i for i in url if i.startswith('#')]
+        if stop:
+            url = url[:url.index(stop[0])]
+        return [i for i in url if i]
+
+
 class Grabber(object):
     browser: Browser
     user: User
@@ -47,6 +77,7 @@ class Grabber(object):
 
     def __init__(self, browser: Browser, cookiePath: str = None):
         self.browser = browser
+        self.browser.go = partial(self.browser.go, isReachedUrl=isReachedUrl)
         self.user = User(self.browser)
         self.sportGrid = SportGrid(self.browser)
         self.leagueGrid = LeagueGrid(self.browser)
@@ -63,13 +94,14 @@ class Grabber(object):
         self.user.setLoginData(username, password)
         self.user.login()
 
-    def go(self, url: str, until: Union[Callable, Tuple[Callable, ...]] = None,
-           empty: Callable = None, reload: Callable = None):
+    def go(self, url: str,
+           until: Union[Callable, Tuple[Callable, ...]] = None,
+           empty: Callable = None,
+           reload: Callable = None):
         while 1:
             self.browser.go(url, until=until, empty=empty, reload=reload)
-            if self.user.isLoggedIn():
-                break
-            self.user.login()
+            if not self.user.isLoggedIn():
+                self.user.login()
 
     @catchExceptions
     def getLeagues(self, sport: str, date: str) -> Optional[List[League]]:
@@ -122,8 +154,8 @@ class Grabber(object):
                 continue
             url = seasonsUrls[seasonName]
             if not isReachedSeason():
-                self.browser.go(url, until=(self.leagueGrid.isLoadedGrid, isReachedSeason),
-                                empty=self.leagueGrid.isEmpty, reload=self.leagueGrid.isReload)
+                self.go(url, until=(self.leagueGrid.isLoadedGrid, isReachedSeason),
+                        empty=self.leagueGrid.isEmpty, reload=self.leagueGrid.isReload)
 
             if not self.leagueGrid.isEmpty():
                 while 1:

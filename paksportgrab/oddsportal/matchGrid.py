@@ -2,6 +2,7 @@ from typing import Optional, Tuple, List, Dict
 from paklib import datetimeutils
 from pakselenium import Browser
 from pakselenium.browser import PageElement
+from selenium.webdriver.common.by import By
 
 from . import utils
 from .config import names
@@ -31,6 +32,14 @@ class MatchGrid(Grid):
     def __init__(self, browser: Browser):
         super().__init__()
         self.browser = browser
+
+    def isFinished(self) -> bool:
+        if not self.browser.isOnPage(matchPage.result):
+            return False
+        pe = self.browser.findElement(matchPage.result)
+        if 'Final result' in pe.text:
+            return True
+        return False
 
     def getSCL(self) -> Tuple[str, str, str]:
         # ['/', sport, country, league]
@@ -130,7 +139,7 @@ class MatchGrid(Grid):
         oddsDict = {}
         for row in self.browser.findElements(matchPage.valueGrid):
             # ['91.5%', '5.37', '1.10', '(3)', 'Compare odds']
-            pes = self.browser.findElementsFrom(row, 'span')
+            pes = self.browser.findElementsFrom(row, (By.CSS_SELECTOR, 'span'))
             line = [i.text for i in pes]
             if len(set(line)) < 3:
                 continue
@@ -148,7 +157,7 @@ class MatchGrid(Grid):
             odds = {key: odd for key, odd in zip(oddsKeys, odds)}
             odds['bkNum'] = bkNum
 
-            value = self.browser.findElementFrom(row, 'strong')
+            value = self.browser.findElementFrom(row, (By.CSS_SELECTOR, 'strong'))
             value = reCompiled.oddValue.findall(value.text)[0]
             value = float(value)
             oddsDict[value] = odds

@@ -1,4 +1,5 @@
 import re
+from selenium.webdriver.common.by import By
 
 
 class ReCompiled:
@@ -8,66 +9,66 @@ class ReCompiled:
 
 
 class UserPage:
-    loginBtn = 'div.fix > button'
-    logoutBtn = '#user-header-logout > a'
-    usernameForm = '#login-username1'
-    passwordForm = '#login-password1'
-    loginFormBtn = '#col-content > div.form > div.content > form > div > button'
+    loginBtn = (By.CSS_SELECTOR, 'div.fix > button')
+    logoutBtn = (By.CSS_SELECTOR, '#user-header-logout > a')
+    usernameForm = (By.CSS_SELECTOR, '#login-username1')
+    passwordForm = (By.CSS_SELECTOR, '#login-password1')
+    loginFormBtn = (By.CSS_SELECTOR, '#col-content > div.form > div.content > form > div > button')
 
 
 class SportPage:
-    date = '#col-content > h1'
-    currentSport = '#tabdiv_sport > ul > li.tab.active > a'
-    moreSport = '#others-link-sport > span'
-    currentSortTab = '#tabdiv_sort > ul > li.tab.active > a'
-    kickOffTimeTab = '#sort_time > a'
-    eventsTab = '#sort_events > a'
-    grid = '#table-matches > table > tbody > tr'
-    gridElement = '#table-matches > table > tbody > tr.odd'
-    error = '#col-content > h1'  # ????
+    date = (By.CSS_SELECTOR, '#col-content > h1')
+    currentSport = (By.CSS_SELECTOR, '#tabdiv_sport > ul > li.tab.active > a')
+    moreSport = (By.CSS_SELECTOR, '#others-link-sport > span')
+    currentSortTab = (By.CSS_SELECTOR, '#tabdiv_sort > ul > li.tab.active > a')
+    kickOffTimeTab = (By.CSS_SELECTOR, '#sort_time > a')
+    eventsTab = (By.CSS_SELECTOR, '#sort_events > a')
+    grid = (By.CSS_SELECTOR, '#table-matches > table > tbody > tr')
+    gridElement = (By.CSS_SELECTOR, '#table-matches > table > tbody > tr.odd')
+    error = (By.CSS_SELECTOR, '#col-content > h1')  # ????
 
 
 class LeaguePageNavigation:
-    currentSeason = '.main-filter .active'
-    seasons = '.main-filter > li > span > strong > a'
-    currentPage = '#pagination .active-page'
-    buttons = '#pagination > a'
-    startButton = '|«'
-    previousButton = '«'
-    nextButton = '»'
-    endButton = '»|'
+    currentSeason = (By.CSS_SELECTOR, '.main-filter .active')
+    seasons = (By.CSS_SELECTOR, '.main-filter > li > span > strong > a')
+    currentPage = (By.CSS_SELECTOR, '#pagination .active-page')
+    buttons = (By.CSS_SELECTOR, '#pagination > a')
+    startButton = (By.CSS_SELECTOR, '|«')
+    previousButton = (By.CSS_SELECTOR, '«')
+    nextButton = (By.CSS_SELECTOR, '»')
+    endButton = (By.CSS_SELECTOR, '»|')
 
 
 class LeaguePage:
-    SCL = '#breadcrumb > a'
-    grid = '#tournamentTable > tbody > tr'
-    gridElement = '#tournamentTable > tbody .odd'
+    SCL = (By.CSS_SELECTOR, '#breadcrumb > a')
+    grid = (By.CSS_SELECTOR, '#tournamentTable > tbody > tr')
+    gridElement = (By.CSS_SELECTOR, '#tournamentTable > tbody .odd')
     ignoreTabs = ['NEXT MATCHES', 'RESULTS', 'STANDINGS', 'OUTRIGHTS']
     navigation = LeaguePageNavigation()
 
 
 class MatchPage:
-    SCL = '#breadcrumb > a'
-    teams = '#col-content > h1'
-    date = '#col-content > p.date'
-    result = '#event-status > p'
-    currentTab = '#bettype-tabs > ul > li.active'
-    tabs = '#bettype-tabs > ul > li'
-    moreTab = '#tab-sport-others > span'
-    moreTabsHidden = '#bettype-tabs > ul > li.r.more.hover > div > div > p > a'
-    currentSubTab = '#bettype-tabs-scope > ul > li.active'
-    subTabs = '#bettype-tabs-scope > ul > li'
-    valueGrid = '#odds-data-table > div > div'
-    valueGridBorder = '#col-content > div.table-chunk-header-dark > div'
-    valueGridElement = '#odds-data-table > div.table-container'
-    tableGridBorder = '#odds-data-table > div > table > thead > tr > th.center'
-    tableGridElement = '#odds-data-table > div > table > tfoot > tr.aver > td.right'
-    tableGridBkNum = '#odds-data-table > div > table > tbody > tr.lo'
+    SCL = (By.CSS_SELECTOR, '#breadcrumb > a')
+    teams = (By.CSS_SELECTOR, '#col-content > h1')
+    date = (By.CSS_SELECTOR, '#col-content > p.date')
+    result = (By.CSS_SELECTOR, '#event-status > p')
+    currentTab = (By.CSS_SELECTOR, '#bettype-tabs > ul > li.active')
+    tabs = (By.CSS_SELECTOR, '#bettype-tabs > ul > li')
+    moreTab = (By.CSS_SELECTOR, '#tab-sport-others > span')
+    moreTabsHidden = (By.CSS_SELECTOR, '#bettype-tabs > ul > li.r.more.hover > div > div > p > a')
+    currentSubTab = (By.CSS_SELECTOR, '#bettype-tabs-scope > ul > li.active')
+    subTabs = (By.CSS_SELECTOR, '#bettype-tabs-scope > ul > li')
+    valueGrid = (By.CSS_SELECTOR, '#odds-data-table > div > div')
+    valueGridBorder = (By.CSS_SELECTOR, '#col-content > div.table-chunk-header-dark > div')
+    valueGridElement = (By.CSS_SELECTOR, '#odds-data-table > div.table-container')
+    tableGridBorder = (By.CSS_SELECTOR, '#odds-data-table > div > table > thead > tr > th.center')
+    tableGridElement = (By.CSS_SELECTOR, '#odds-data-table > div > table > tfoot > tr.aver > td.right')
+    tableGridBkNum = (By.CSS_SELECTOR, '#odds-data-table > div > table > tbody > tr.lo')
 
 
 class Message:
-    msg = '.message-info'  # 'No data available', 'try again' in msg
-    internetError = '#main-message > h1 > span'  # 'Нет подключения к Интернету'
+    msg = (By.CSS_SELECTOR, '.message-info')  # 'No data available', 'try again' in msg
+    internetError = (By.CSS_SELECTOR, '#main-message > h1 > span')  # 'Нет подключения к Интернету'
 
 
 reCompiled = ReCompiled()

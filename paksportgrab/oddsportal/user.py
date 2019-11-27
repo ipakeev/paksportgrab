@@ -18,14 +18,11 @@ class User(object):
         self.password = password
 
     def isLoggedIn(self):
-        def untilLoginBtn():
-            return self.browser.isOnPage(userPage.loginBtn)
-
-        def untilLogoutBtn():
-            return self.browser.isOnPage(userPage.logoutBtn)
+        def untilBtn():
+            return self.browser.isOnPage(userPage.loginBtn) or self.browser.isOnPage(userPage.logoutBtn)
 
         if names.baseUrl not in self.browser.currentUrl:
-            self.browser.go(names.baseUrl, untilOr=(untilLoginBtn, untilLogoutBtn))
+            self.browser.go(names.baseUrl, until=untilBtn)
 
         if self.browser.isOnPage(userPage.logoutBtn):
             return True
@@ -38,6 +35,9 @@ class User(object):
         def untilLogoutBtn():
             return self.browser.isOnPage(userPage.logoutBtn)
 
+        def untilBtn():
+            return untilLoginBtn() or untilLogoutBtn()
+
         cookiePath = ioutils.correctFileName([names.cookiePath, 'oddsportal_cookies.pkl'])
         if self.isLoggedIn():
             return
@@ -45,7 +45,7 @@ class User(object):
         cookies = ioutils.loadPickle(cookiePath)
         if cookies:
             self.browser.setCookies(cookies)
-            self.browser.refresh(untilOr=(untilLoginBtn, untilLogoutBtn))
+            self.browser.refresh(until=untilBtn)
             if self.isLoggedIn():
                 return
 
