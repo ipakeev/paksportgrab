@@ -65,6 +65,7 @@ def test_text(grabber: Grabber, match: Match):
 
     scoreString = '1:3 (1:1, 0:2)'
     assert grabber.matchGrid.getResult() == scoreString
+    assert grabber.matchGrid.isFinished()
     assert match.scoreString == scoreString
 
 
