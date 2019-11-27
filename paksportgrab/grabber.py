@@ -103,7 +103,9 @@ class Grabber(object):
            reload: Callable = None):
         while 1:
             self.browser.go(url, until=until, empty=empty, reload=reload)
-            if not self.user.isLoggedIn():
+            if self.user.isLoggedIn():
+                break
+            else:
                 self.user.login()
 
     @catchExceptions

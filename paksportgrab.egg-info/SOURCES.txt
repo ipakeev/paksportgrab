@@ -15,6 +15,7 @@ paksportgrab/oddsportal/matchGrid.py
 paksportgrab/oddsportal/sportGrid.py
 paksportgrab/oddsportal/user.py
 paksportgrab/oddsportal/utils.py
+paksportgrab/oddsportal/config/GLOBAL.py
 paksportgrab/oddsportal/config/__init__.py
 paksportgrab/oddsportal/config/names.py
 paksportgrab/oddsportal/config/selector.py
