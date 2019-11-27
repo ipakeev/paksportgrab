@@ -1,5 +1,6 @@
 from paklib import datetimeutils
 from pakselenium.browser import Browser, PageElement
+from selenium.webdriver.common.by import By
 
 from .. import utils
 
@@ -20,7 +21,7 @@ class SportGridBorder(Border):
 
     def update(self, browser: Browser, pe: PageElement):
         # [country, league]
-        pes = browser.findElementsFrom(pe, 'th > a')
+        pes = browser.findElementsFrom(pe, (By.CSS_SELECTOR, 'th > a'))
         assert len(pes) == 2
         country, league = pes
         self.country = country.text
@@ -28,14 +29,14 @@ class SportGridBorder(Border):
         self.leagueUrl = league.getAttribute('href') + 'results/'
 
         # [cl, *odds, bkNum]
-        pes = browser.findElementsFrom(pe, 'th')
+        pes = browser.findElementsFrom(pe, (By.CSS_SELECTOR, 'th'))
         self.oddsType = [i.text for i in pes[1:-1]]
 
 
 class LeagueGridBorder(Border):
 
     def update(self, browser: Browser, pe: PageElement):
-        pes = browser.findElementsFrom(pe, 'th')
+        pes = browser.findElementsFrom(pe, (By.CSS_SELECTOR, 'th'))
         date, *odds, bk = [i.text for i in pes]
         self.date = self.getCorrectDate(date)
         self.oddsType = odds

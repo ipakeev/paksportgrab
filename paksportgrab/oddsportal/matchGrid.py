@@ -5,7 +5,7 @@ from pakselenium.browser import PageElement
 from selenium.webdriver.common.by import By
 
 from . import utils
-from .config import names
+from .config import names, GLOBAL
 from .config.selector import matchPage
 from .config.selector import reCompiled
 from .grid import Grid
@@ -13,6 +13,9 @@ from .grid import Grid
 
 def catchExceptions(func):
     def wrapper(self, *args, **kwargs):
+        if GLOBAL.debug:
+            return func(self, *args, **kwargs)
+
         while 1:
             try:
                 return func(self, *args, **kwargs)

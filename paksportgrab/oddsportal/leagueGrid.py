@@ -6,10 +6,14 @@ from .config.selector import leaguePage
 from .grid import Grid
 from .units.border import LeagueGridBorder
 from .units.match import Match
+from .config import GLOBAL
 
 
 def catchExceptions(func):
     def wrapper(self, *args, **kwargs):
+        if GLOBAL.debug:
+            return func(self, *args, **kwargs)
+
         while 1:
             try:
                 return func(self, *args, **kwargs)

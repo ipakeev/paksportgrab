@@ -8,10 +8,14 @@ from .units.border import SportGridBorder
 from .units.sport import Sport
 from .units.league import League
 from .units.match import Match
+from .config import GLOBAL
 
 
 def catchExceptions(func):
     def wrapper(self, *args, **kwargs):
+        if GLOBAL.debug:
+            return func(self, *args, **kwargs)
+
         while 1:
             try:
                 return func(self, *args, **kwargs)

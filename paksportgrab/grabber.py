@@ -11,12 +11,15 @@ from .oddsportal.leagueGrid import LeagueGrid
 from .oddsportal.matchGrid import MatchGrid
 from .oddsportal.units.league import League, SeasonDescribe
 from .oddsportal.units.match import Match
-from .oddsportal.config import names
+from .oddsportal.config import names, GLOBAL
 from .oddsportal import utils
 
 
 def catchExceptions(func):
     def wrapper(self, *args, **kwargs):
+        if GLOBAL.debug:
+            return func(self, *args, **kwargs)
+
         crash = 0
         while 1:
             try:
