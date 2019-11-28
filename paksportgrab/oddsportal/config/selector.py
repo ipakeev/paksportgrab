@@ -33,10 +33,10 @@ class LeaguePageNavigation:
     seasons = (By.CSS_SELECTOR, '.main-filter > li > span > strong > a')
     currentPage = (By.CSS_SELECTOR, '#pagination .active-page')
     buttons = (By.CSS_SELECTOR, '#pagination > a')
-    startButton = (By.CSS_SELECTOR, '|«')
-    previousButton = (By.CSS_SELECTOR, '«')
-    nextButton = (By.CSS_SELECTOR, '»')
-    endButton = (By.CSS_SELECTOR, '»|')
+    startButton = '|«'
+    previousButton = '«'
+    nextButton = '»'
+    endButton = '»|'
 
 
 class LeaguePage:
