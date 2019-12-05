@@ -86,9 +86,10 @@ class LeagueGrid(Grid):
                 continue
             elif 'table-dummyrow' in cl:  # пустая строка
                 continue
-            elif cl == 'odd':  # new match without score
+            elif cl == 'odd' or cl == '':  # new match without score
                 continue
             else:
+                print('help paksportgrab -> leagueGrid -> grab(): ', [cl])
                 raise StopIteration(cl)
         return matches
 
