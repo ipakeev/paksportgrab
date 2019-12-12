@@ -1,4 +1,5 @@
 from typing import Dict, Optional
+from copy import deepcopy
 from pakselenium.browser import Browser, PageElement
 from selenium.webdriver.common.by import By
 
@@ -71,6 +72,9 @@ class Match(object):
         for name, value in attrs.items():
             self.__setattr__(name, value)
         return self
+
+    def copy(self):
+        return deepcopy(self)
 
     def parse(self, browser: Browser, border: Border, pe: PageElement):
         self.date = border.date
