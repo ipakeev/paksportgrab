@@ -80,15 +80,21 @@ class Match(object):
             if not loc:
                 return None
             return [loc['1'], loc['X'], loc['2']]
+
         elif tab == names.WL:
             loc = self.odds[tab][self.scoreName]
+            if not loc:
+                return None
             return [loc['1'], loc['2']]
+
         elif tab == names.total:
             loc = self.odds[tab][self.scoreName][self.totBk]
             return [loc['over'], loc['under']]
+
         elif tab == names.handicap:
             loc = self.odds[tab][self.scoreName][self.hpBk]
             return [loc['1'], loc['2']]
+
         else:
             print(tab)
             raise ValueError(tab)
