@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import List, Dict, Optional
 from copy import deepcopy
 from pakselenium.browser import Browser, PageElement
 from selenium.webdriver.common.by import By
@@ -74,9 +74,11 @@ class Match(object):
             self.__setattr__(name, value)
         return self
 
-    def getOdds(self, tab: str):
+    def getOdds(self, tab: str) -> Optional[List[float]]:
         if tab == names.WDL:
             loc = self.odds[tab][self.scoreName]
+            if not loc:
+                return None
             return [loc['1'], loc['X'], loc['2']]
         elif tab == names.WL:
             loc = self.odds[tab][self.scoreName]
