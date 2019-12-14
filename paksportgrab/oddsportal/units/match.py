@@ -31,6 +31,7 @@ class Match(object):
     filledScore: bool
 
     data: dict
+    wdlName: str
     scoreName: str
     totBk: float
     hpBk: float
@@ -72,6 +73,23 @@ class Match(object):
         for name, value in attrs.items():
             self.__setattr__(name, value)
         return self
+
+    def getOdds(self, tab: str):
+        if tab == names.WDL:
+            loc = self.odds[tab][self.scoreName]
+            return [loc['1'], loc['X'], loc['2']]
+        elif tab == names.WL:
+            loc = self.odds[tab][self.scoreName]
+            return [loc['1'], loc['2']]
+        elif tab == names.total:
+            loc = self.odds[tab][self.scoreName][self.totBk]
+            return [loc['over'], loc['under']]
+        elif tab == names.handicap:
+            loc = self.odds[tab][self.scoreName][self.hpBk]
+            return [loc['1'], loc['2']]
+        else:
+            print(tab)
+            raise ValueError(tab)
 
     def copy(self):
         return deepcopy(self)
