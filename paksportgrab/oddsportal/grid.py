@@ -28,6 +28,8 @@ class Grid(object):
                 return True
             elif msg == 'There are no odds available for this event.':
                 return True
+            elif 'no upcoming matches' in msg or 'as soon as' in msg:
+                return True
             elif 'try again' in self.msg:
                 return False
             else:
