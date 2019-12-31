@@ -39,19 +39,19 @@ def test_common(grabber: Grabber):
 def test_tabs(grabber: Grabber):
     assert grabber.matchGrid.getCurrentTabName() in names.tabName.values()
     tabs = grabber.matchGrid.getTabs()
-    assert names.WDL in tabs
-    assert names.handicap in tabs
-    assert names.total in tabs
-    assert names.WL not in tabs
+    assert names.tab.WDL in tabs
+    assert names.tab.handicap in tabs
+    assert names.tab.total in tabs
+    assert names.tab.WL not in tabs
 
 
 def test_subTabs(grabber: Grabber):
     assert grabber.matchGrid.getCurrentSubTabName() in names.subTabName.values()
     subTabs = grabber.matchGrid.getSubTabs()
-    assert names.ft in subTabs
-    assert names.ftot not in subTabs
-    assert names.h1 in subTabs
-    assert names.q1 not in subTabs
+    assert names.subTab.ft in subTabs
+    assert names.subTab.ftot not in subTabs
+    assert names.subTab.h1 in subTabs
+    assert names.subTab.q1 not in subTabs
 
 
 def test_text(grabber: Grabber, match: Match):
@@ -70,14 +70,14 @@ def test_text(grabber: Grabber, match: Match):
 
 
 def test_grid(match: Match):
-    assert match.odds[names.WDL][names.ft] == {'1': 1.78, 'X': 3.44, '2': 4.7, 'bkNum': 14}
-    assert match.odds[names.WDL][names.h1] == {'1': 2.42, 'X': 2.04, '2': 5.04, 'bkNum': 11}
+    assert match.odds[names.tab.WDL][names.subTab.ft] == {'1': 1.78, 'X': 3.44, '2': 4.7, 'bkNum': 14}
+    assert match.odds[names.tab.WDL][names.subTab.h1] == {'1': 2.42, 'X': 2.04, '2': 5.04, 'bkNum': 11}
 
-    assert match.odds[names.handicap][names.ft][0] == {'1': 1.3, '2': 3.53, 'bkNum': 7}
-    assert len(match.odds[names.handicap][names.ft]) == 18
+    assert match.odds[names.tab.handicap][names.subTab.ft][0] == {'1': 1.3, '2': 3.53, 'bkNum': 7}
+    assert len(match.odds[names.tab.handicap][names.subTab.ft]) == 18
 
-    assert match.odds[names.total][names.ft][2.5] == {'over': 2.22, 'under': 1.65, 'bkNum': 12}
-    assert match.odds[names.total][names.h1][1] == {'over': 2.18, 'under': 1.68, 'bkNum': 4}
+    assert match.odds[names.tab.total][names.subTab.ft][2.5] == {'over': 2.22, 'under': 1.65, 'bkNum': 12}
+    assert match.odds[names.tab.total][names.subTab.h1][1] == {'over': 2.18, 'under': 1.68, 'bkNum': 4}
 
-    assert len(match.odds[names.total][names.ft]) == 13
-    assert len(match.odds[names.total][names.h1]) == 7
+    assert len(match.odds[names.tab.total][names.subTab.ft]) == 13
+    assert len(match.odds[names.tab.total][names.subTab.h1]) == 7
