@@ -75,23 +75,23 @@ class Match(object):
         return self
 
     def getOdds(self, tab: str) -> Optional[List[float]]:
-        if tab == names.WDL:
+        if tab == names.tab.WDL:
             loc = self.odds[tab][self.scoreName]
             if not loc:
                 return None
             return [loc['1'], loc['X'], loc['2']]
 
-        elif tab == names.WL:
+        elif tab == names.tab.WL:
             loc = self.odds[tab][self.scoreName]
             if not loc:
                 return None
             return [loc['1'], loc['2']]
 
-        elif tab == names.total:
+        elif tab == names.tab.total:
             loc = self.odds[tab][self.scoreName][self.totBk]
             return [loc['over'], loc['under']]
 
-        elif tab == names.handicap:
+        elif tab == names.tab.handicap:
             loc = self.odds[tab][self.scoreName][self.hpBk]
             return [loc['1'], loc['2']]
 

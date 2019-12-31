@@ -186,7 +186,7 @@ class Grabber(object):
     def fillMatch(self, match: Match, fillFinished=False):
         if match.filledScore and match.filledOdds:
             return
-        oddsTabs = names.tabs[match.sport]
+        oddsTabs = names.sportTabs[match.sport]
 
         def getTabsNameList():
             current = self.matchGrid.getCurrentTabName()
