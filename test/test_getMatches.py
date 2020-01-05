@@ -1,4 +1,5 @@
 import pytest
+import datetime
 from typing import List
 from paksportgrab.grabber import Grabber
 from paksportgrab.oddsportal.units.match import Match
@@ -109,28 +110,28 @@ class TestTillPage3:
             _ = match.league
 
         assert match.season == '2017/2018'
-        assert match.date == '20180515'
-        assert match.time == '03:15'
+        assert match.date == datetime.date(2018, 5, 15)
+        assert match.time == datetime.time(3, 15)
         assert match.teams == ['Gimnasia L.P.', 'Newells Old Boys']
         assert match.url == 'https://www.oddsportal.com/soccer/argentina/superliga-2017-2018/gimnasia-l-p-newells-old-boys-QVBrfakT/'
         assert match.id == 'QVBrfakT'
         assert match.scoreString == '2:0'
-        assert match.odds == {'1X2': {'1': 2.61, 'X': 3.05, '2': 2.85}}
-        assert match.bkNum == 14
+        assert match.odds == {}
+        assert match.bkNum == 13
         assert match.finished
 
     def test_lastMatch(self, matches_tillPage3: List[Match]):
         match = matches_tillPage3[-1]
 
         assert match.season == '2017/2018'
-        assert match.date == '20180225'
-        assert match.time == '01:15'
+        assert match.date == datetime.date(2018, 2, 25)
+        assert match.time == datetime.time(1, 15)
         assert match.teams == ['Velez Sarsfield', 'River Plate']
         assert match.url == 'https://www.oddsportal.com/soccer/argentina/superliga-2017-2018/velez-sarsfield-river-plate-xGt8WUHH/'
         assert match.id == 'xGt8WUHH'
         assert match.scoreString == '1:0'
-        assert match.odds == {'1X2': {'1': 3.16, 'X': 3.18, '2': 2.31}}
-        assert match.bkNum == 14
+        assert match.odds == {}
+        assert match.bkNum == 13
         assert match.finished
 
 

@@ -1,4 +1,4 @@
-from paklib import datetimeutils
+import datetime
 from pakselenium.browser import Browser, PageElement
 from selenium.webdriver.common.by import By
 
@@ -10,7 +10,7 @@ class Border(object):
     country: str
     league: str
     leagueUrl: str
-    date: str
+    date: datetime.date
     oddsType: list
 
     def update(self, browser: Browser, pe: PageElement):
@@ -42,13 +42,14 @@ class LeagueGridBorder(Border):
         self.oddsType = odds
 
     @staticmethod
-    def getCorrectDate(date):
+    def getCorrectDate(date: str) -> datetime.date:
+        # date = '19 Sep 2019'
         if 'Tomorrow' in date:
-            today = datetimeutils.today()
-            return datetimeutils.datetimeOtherDay(today, 1)
+            today = datetime.date.today()
+            return today + datetime.timedelta(days=1)
         if 'Today' in date:
-            return datetimeutils.today()
+            return datetime.date.today()
         if 'Yesterday' in date:
-            today = datetimeutils.today()
-            return datetimeutils.datetimeOtherDay(today, -1)
+            today = datetime.date.today()
+            return today - datetime.timedelta(days=1)
         return utils.getDateFromString(date)

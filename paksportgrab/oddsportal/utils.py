@@ -1,5 +1,6 @@
+import datetime
 from typing import Optional
-from paklib import ioutils, datetimeutils
+from paklib import ioutils
 
 from .config.selector import reCompiled
 from .config import names
@@ -35,15 +36,23 @@ def getMatchId(url: str) -> str:
     return matchId
 
 
-def getDateFromString(string) -> str:
-    # '19 Sep 2019' -> '20190919'
-    date = reCompiled.date.findall(string)[0]
-    day = date[0]
-    month = datetimeutils.getMonthCode(date[1])
-    year = date[2]
-    return year + month + day
-
-
-def getDateSportUrl(sport, date) -> str:
+def getDateSportUrl(sport: str, date: datetime.date) -> str:
     # -> 'https://www.oddsportal.com/matches/sport/date/'
-    return ioutils.correctFileName([names.baseUrl, 'matches', sport, date]) + '/'
+    return ioutils.correctFileName([names.baseUrl, 'matches', sport, date.strftime('%Y%m%d')]) + '/'
+
+
+def getDateFromString(s: str) -> datetime.date:
+    day, month, year = reCompiled.date.findall(s)[0]
+    return datetime.datetime.strptime(f'{day} {month} {year}', '%d %b %Y').date()
+
+
+def getDateTimeFromString(s: str) -> datetime.datetime:
+    day, month, year, tt = reCompiled.dateTime.findall(s)[0]
+    date = datetime.datetime.strptime(f'{day} {month} {year}', '%d %b %Y').date()
+    time = datetime.time.fromisoformat(tt)
+    return datetime.datetime.combine(date, time)
+
+
+def getOddValue(s: str) -> float:
+    value = reCompiled.oddValue.findall(s)[0]
+    return float(value)

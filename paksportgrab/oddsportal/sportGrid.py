@@ -1,3 +1,4 @@
+import datetime
 from typing import List
 from pakselenium import Browser
 
@@ -36,7 +37,7 @@ class SportGrid(Grid):
         super().__init__()
         self.browser = browser
 
-    def getCurrentDate(self) -> str:
+    def getCurrentDate(self) -> datetime.date:
         pe = self.browser.findElement(sportPage.date)
         return utils.getDateFromString(pe.text)
 

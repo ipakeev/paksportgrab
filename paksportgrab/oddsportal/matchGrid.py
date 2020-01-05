@@ -1,5 +1,5 @@
+import datetime
 from typing import Optional, Tuple, List, Dict
-from paklib import datetimeutils
 from pakselenium import Browser
 from pakselenium.browser import PageElement
 from selenium.webdriver.common.by import By
@@ -7,7 +7,6 @@ from selenium.webdriver.common.by import By
 from . import utils
 from .config import names, GLOBAL
 from .config.selector import matchPage
-from .config.selector import reCompiled
 from .grid import Grid
 
 
@@ -56,11 +55,9 @@ class MatchGrid(Grid):
         assert all([i for i in teams])
         return teams
 
-    def getDateTime(self) -> Tuple[str, str]:
+    def getDateTime(self) -> datetime.datetime:
         pe = self.browser.findElement(matchPage.date)
-        day, month, year, tt = reCompiled.dateTime.findall(pe.text)[0]
-        month = datetimeutils.getMonthCode(month)
-        return year + month + day, tt
+        return utils.getDateTimeFromString(pe.text)
 
     def getResult(self) -> Optional[str]:
         if not self.browser.isOnPage(matchPage.result):
@@ -161,8 +158,7 @@ class MatchGrid(Grid):
             odds['bkNum'] = bkNum
 
             value = self.browser.findElementFrom(row, (By.CSS_SELECTOR, 'strong'))
-            value = reCompiled.oddValue.findall(value.text)[0]
-            value = float(value)
+            value = utils.getOddValue(value.text)
             oddsDict[value] = odds
 
         return oddsDict

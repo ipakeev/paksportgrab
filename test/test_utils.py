@@ -1,5 +1,5 @@
 import pytest
-
+import datetime
 from paksportgrab.oddsportal.config import names
 from paksportgrab.oddsportal.config.selector import reCompiled
 from paksportgrab.oddsportal import utils
@@ -74,9 +74,31 @@ def test_matchId():
     assert utils.getMatchId(url) == 'I9OmRkES'
 
 
-def test_dateFromString():
-    assert utils.getDateFromString('19 Sep 2019') == '20190919'
-
-
 def test_dateSportUrl():
-    assert utils.getDateSportUrl('soccer', '20190919') == f'{names.baseUrl}matches/soccer/20190919/'
+    date = datetime.date(2019, 9, 19)
+    assert utils.getDateSportUrl('soccer', date) == f'{names.baseUrl}matches/soccer/20190919/'
+
+
+def test_dateFromString():
+    assert utils.getDateFromString('19 Sep 2019') == datetime.date(2019, 9, 19)
+    assert utils.getDateFromString('Today, 19 Sep 2019, 18:00') == datetime.date(2019, 9, 19)
+
+
+def test_dateTimeFromString():
+    dt = datetime.datetime(2019, 9, 19, 18, 30)
+    assert utils.getDateTimeFromString('Today, 19 Sep 2019, 18:30') == dt
+
+
+def test_oddValue():
+    assert utils.getOddValue('-1.75') == -1.75
+    assert utils.getOddValue('-1.5') == -1.5
+    assert utils.getOddValue('-1') == -1.0
+    assert utils.getOddValue('-0') == 0.0
+    assert utils.getOddValue('0') == 0.0
+    assert utils.getOddValue('+0') == 0.0
+    assert utils.getOddValue('1') == 1.0
+    assert utils.getOddValue('+1') == 1.0
+    assert utils.getOddValue('1.5') == 1.5
+    assert utils.getOddValue('+1.5') == 1.5
+    assert utils.getOddValue('1.75') == 1.75
+    assert utils.getOddValue('+1.75') == 1.75

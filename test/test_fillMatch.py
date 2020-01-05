@@ -1,29 +1,19 @@
 import pytest
+import datetime
 from paksportgrab.grabber import Grabber
+from paksportgrab.oddsportal.units.match import Match
 from paksportgrab.oddsportal.config import names
-
-
-class Match:
-    sport: str
-    date: str
-    time: str
-    scoreString: str
-    odds: dict
-    finished: bool = True
-    filledScore: bool = False
-    filledOdds: bool = False
-
-    def __init__(self, sport, url):
-        self.sport = sport
-        self.url = url
-        self.odds = dict()
 
 
 @pytest.fixture(scope='module', autouse=True)
 def match(grabber: Grabber):
-    sport = 'soccer'
-    url = 'https://www.oddsportal.com/soccer/argentina/superliga-2017-2018/tigre-patronato-pCQq96qD/'
-    m = Match(sport, url)
+    m = Match()
+    m.sport = 'soccer'
+    m.url = 'https://www.oddsportal.com/soccer/argentina/superliga-2017-2018/tigre-patronato-pCQq96qD/'
+    m.odds = {}
+    m.setFinished()
+    m.filledScore = False
+    m.filledOdds = False
     grabber.fillMatch(m)
     return m
 
@@ -58,10 +48,10 @@ def test_text(grabber: Grabber, match: Match):
     assert grabber.matchGrid.getSCL() == ('Soccer', 'Argentina', 'Superliga 2017/2018')
     assert grabber.matchGrid.getTeams() == ['Tigre', 'Patronato']
 
-    date, time = '20170916', '01:05'
-    assert grabber.matchGrid.getDateTime() == (date, time)
-    assert match.date == date
-    assert match.time == time
+    dt = datetime.datetime(2017, 9, 16, 1, 5)
+    assert grabber.matchGrid.getDateTime() == dt
+    assert match.date == dt.date()
+    assert match.time == dt.time()
 
     scoreString = '1:3 (1:1, 0:2)'
     assert grabber.matchGrid.getResult() == scoreString
@@ -70,14 +60,14 @@ def test_text(grabber: Grabber, match: Match):
 
 
 def test_grid(match: Match):
-    assert match.odds[names.tab.WDL][names.subTab.ft] == {'1': 1.78, 'X': 3.44, '2': 4.7, 'bkNum': 14}
-    assert match.odds[names.tab.WDL][names.subTab.h1] == {'1': 2.42, 'X': 2.04, '2': 5.04, 'bkNum': 11}
+    assert match.odds[names.tab.WDL][names.subTab.ft] == {'1': 1.78, 'X': 3.42, '2': 4.68, 'bkNum': 13}
+    assert match.odds[names.tab.WDL][names.subTab.h1] == {'1': 2.42, 'X': 2.04, '2': 4.99, 'bkNum': 10}
 
-    assert match.odds[names.tab.handicap][names.subTab.ft][0] == {'1': 1.3, '2': 3.53, 'bkNum': 7}
+    assert match.odds[names.tab.handicap][names.subTab.ft][0] == {'1': 1.31, '2': 3.52, 'bkNum': 6}
     assert len(match.odds[names.tab.handicap][names.subTab.ft]) == 18
 
-    assert match.odds[names.tab.total][names.subTab.ft][2.5] == {'over': 2.22, 'under': 1.65, 'bkNum': 12}
-    assert match.odds[names.tab.total][names.subTab.h1][1] == {'over': 2.18, 'under': 1.68, 'bkNum': 4}
+    assert match.odds[names.tab.total][names.subTab.ft][2.5] == {'over': 2.22, 'under': 1.64, 'bkNum': 11}
+    assert match.odds[names.tab.total][names.subTab.h1][1] == {'over': 2.21, 'under': 1.66, 'bkNum': 3}
 
     assert len(match.odds[names.tab.total][names.subTab.ft]) == 13
     assert len(match.odds[names.tab.total][names.subTab.h1]) == 7

@@ -1,5 +1,6 @@
-import time
 import re
+import time
+import datetime
 from functools import partial
 from typing import Optional, Union, List, Tuple, Callable
 from pakselenium import Browser
@@ -109,7 +110,7 @@ class Grabber(object):
                 self.user.login()
 
     @catchExceptions
-    def getLeagues(self, sport: str, date: str) -> Optional[List[League]]:
+    def getLeagues(self, sport: str, date: datetime.date) -> Optional[List[League]]:
         url = utils.getDateSportUrl(sport, date)
 
         self.go(url, until=self.sportGrid.isLoadedGrid,
@@ -213,7 +214,7 @@ class Grabber(object):
         self.go(match.url, until=self.matchGrid.isLoadedGrid,
                 empty=self.matchGrid.isEmpty, reload=self.matchGrid.isReload)
 
-        match.date, match.time = self.matchGrid.getDateTime()
+        match.dateTime = self.matchGrid.getDateTime()
         match.scoreString = self.matchGrid.getResult()
         match.score = None
 

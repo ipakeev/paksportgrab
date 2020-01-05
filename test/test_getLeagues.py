@@ -1,4 +1,5 @@
 import pytest
+import datetime
 import copy
 from paksportgrab.grabber import Grabber
 
@@ -10,7 +11,7 @@ def sport():
 
 @pytest.fixture(scope='module')
 def date():
-    return '20190923'
+    return datetime.date(2020, 1, 4)
 
 
 @pytest.fixture(scope='class')
@@ -41,35 +42,35 @@ class TestSportGrid:
         assert not sportGrid.isSwitchedToKickOffTime()
 
     def test_sport(self, leagues):
-        assert len(leagues) == 5
+        assert len(leagues) == 4
 
     def test_league(self, leagues, sport):
-        league = leagues[0]
+        league = leagues[1]
         assert league.sport == sport
         assert league.country == 'Cuba'
         assert league.league == 'Serie Nacional'
         assert league.leagueUrl == 'https://www.oddsportal.com/baseball/cuba/serie-nacional/results/'
-        assert len(league.nextMatches) == 7
+        assert len(league.nextMatches) == 2
 
     def test_match(self, leagues, date):
-        league = leagues[0]
+        league = leagues[1]
         match = league.nextMatches[0]
         assert match.sport == league.sport
         assert match.country == league.country
         assert match.league == league.league
 
         assert match.date == date
-        assert match.time == '21:00'
-        assert match.teams == ['Villa Clara', 'Sancti Spiritus']
-        assert match.url == 'https://www.oddsportal.com/baseball/cuba/serie-nacional/villa-clara-sancti-spiritus-88bjyIXl/'
-        assert match.id == '88bjyIXl'
-        assert match.scoreString == '5:0'
-        assert match.odds == {'1X2': {'1': 2.17, '2': 1.64}}
-        assert match.bkNum == 2
+        assert match.time == datetime.time(4, 30)
+        assert match.teams == ['Industriales', 'Camaguey']
+        assert match.url == 'https://www.oddsportal.com/baseball/cuba/serie-nacional/industriales-camaguey-tQIeN0fj/'
+        assert match.id == 'tQIeN0fj'
+        assert match.scoreString == '8:9'
+        assert match.odds == {}
+        assert match.bkNum == 3
         assert match.finished
 
     def test_matchSets(self, leagues):
-        league = leagues[0]
+        league = leagues[1]
         match = copy.deepcopy(league.nextMatches[0])
 
         match.setNotStarted()

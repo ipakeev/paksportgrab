@@ -1,4 +1,5 @@
-from typing import List, Dict, Optional
+import datetime
+from typing import List, Dict, Optional, Union
 from copy import deepcopy
 from pakselenium.browser import Browser, PageElement
 from selenium.webdriver.common.by import By
@@ -8,7 +9,7 @@ from .. import utils
 from ..config import names
 
 
-class Match(object):
+class Match:
     url: str
     id: str
     sport: str
@@ -19,8 +20,9 @@ class Match(object):
     teams: list
     scoreString: Optional[str]
     score: Optional[dict]
-    date: str
-    time: str
+    date: datetime.date
+    time: Union[datetime.time, str]
+    _dateTime: datetime.datetime
     odds: Dict[str, Dict[str, dict]]
     bkNum: Optional[int]
     notStarted: bool
@@ -35,6 +37,16 @@ class Match(object):
     scoreName: str
     totBk: float
     hpBk: float
+
+    @property
+    def dateTime(self):
+        return self._dateTime
+
+    @dateTime.setter
+    def dateTime(self, dt: datetime.datetime):
+        self._dateTime = dt
+        self.date = dt.date()
+        self.time = dt.time()
 
     def setNotStarted(self):
         self.notStarted = True
@@ -106,7 +118,10 @@ class Match(object):
         self.date = border.date
 
         time = browser.findElementFrom(pe, (By.CSS_SELECTOR, 'td.table-time'))
-        self.time = time.text
+        try:
+            self.time = datetime.time.fromisoformat(time.text)
+        except ValueError:
+            self.time = time.text
 
         teams = browser.findElementFrom(pe, (By.CSS_SELECTOR, 'td.name'))
         self.teams = teams.text.split(' - ')
