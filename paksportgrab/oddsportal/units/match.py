@@ -32,6 +32,10 @@ class Match:
     filledOdds: bool
     filledScore: bool
 
+    madeNextAt: datetime.datetime
+    madeReadyAt: datetime.datetime
+    updatedAt: datetime.datetime
+
     data: dict
     wdlName: str
     scoreName: str
