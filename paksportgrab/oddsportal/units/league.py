@@ -1,4 +1,5 @@
 import collections
+import datetime
 from typing import List, Optional
 
 from .border import Border
@@ -34,5 +35,6 @@ class League(object):
         m.leagueId = self.leagueId
 
     def addNextMatch(self, m: Match):
+        m.createdAt = datetime.datetime.today()
         self.setToMatch(m)
         self.nextMatches.append(m)

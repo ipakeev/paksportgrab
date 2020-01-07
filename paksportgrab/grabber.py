@@ -214,6 +214,7 @@ class Grabber(object):
         self.go(match.url, until=self.matchGrid.isLoadedGrid,
                 empty=self.matchGrid.isEmpty, reload=self.matchGrid.isReload)
 
+        match.updatedAt = datetime.datetime.today()
         match.dateTime = self.matchGrid.getDateTime()
         match.scoreString = self.matchGrid.getResult()
         match.score = None
