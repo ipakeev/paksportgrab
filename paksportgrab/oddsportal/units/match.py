@@ -73,17 +73,10 @@ class Match:
         self.canceled = True
 
     def toDict(self):
-        d = {}
-        for name in self.__dir__():
-            attr = self.__getattribute__(name)
-            if name.startswith('_') or callable(attr):
-                continue
-            d[name] = attr
-        return d
+        return self.__dict__
 
     def load(self, attrs: dict):
-        for name, value in attrs.items():
-            self.__setattr__(name, value)
+        self.__dict__.update(attrs)
         return self
 
     def getOdds(self, tab: str) -> Optional[List[float]]:
