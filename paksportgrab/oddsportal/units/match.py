@@ -118,6 +118,7 @@ class Match:
         time = browser.findElementFrom(pe, (By.CSS_SELECTOR, 'td.table-time'))
         try:
             self.time = datetime.time.fromisoformat(time.text)
+            self.dateTime = datetime.datetime.combine(self.date, self.time)
         except ValueError:
             self.time = time.text
 
