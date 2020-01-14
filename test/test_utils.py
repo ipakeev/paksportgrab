@@ -102,3 +102,37 @@ def test_oddValue():
     assert utils.getOddValue('+1.5') == 1.5
     assert utils.getOddValue('1.75') == 1.75
     assert utils.getOddValue('+1.75') == 1.75
+
+
+def test_isReachedUrl():
+    target = 'https://www.oddsportal.com/matches/soccer/20200115/'
+    assert utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/matches/soccer/20200115/')
+    assert not utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/matches/hockey/20200115/')
+    assert not utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/matches/soccer/20200125/')
+
+    target = 'https://www.oddsportal.com/soccer/france/ligue-1/results/'
+    assert utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/soccer/france/ligue-1/results/')
+    assert not utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/hockey/france/ligue-1/results/')
+    assert not utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/soccer/germany/ligue-1/results/')
+    assert not utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/soccer/germany/ligue-1/results/#/page/2/')
+    # assert not utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/soccer/france/ligue-2/results/')
+
+    target = 'https://www.oddsportal.com/soccer/france/ligue-1/results/#/page/2/'
+    assert utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/soccer/france/ligue-1/results/#/page/2/')
+    assert not utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/soccer/france/ligue-1/results/')
+    assert not utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/soccer/france/ligue-1/results/#/page/1/')
+    assert not utils.isReachedUrl(target).isEqual('https://www.oddsportal.com/soccer/germany/ligue-1/results/#/page/2/')
+    # assert not utils.isReachedUrl(target).isEqual(
+    # 'https://www.oddsportal.com/soccer/france/ligue-2/results/#/page/2/')
+
+    target = 'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j3hAArYI/'
+    assert utils.isReachedUrl(target).isEqual(
+        'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j3hAArYI/')
+    assert not utils.isReachedUrl(target).isEqual(
+        'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j2hAArYI/')
+
+    target = 'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j3hAArYI/#over-under;3'
+    assert utils.isReachedUrl(target).isEqual(
+        'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j3hAArYI/#over-under;3')
+    assert not utils.isReachedUrl(target).isEqual(
+        'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j2hAArYI/#over-under;2')

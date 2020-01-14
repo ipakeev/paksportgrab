@@ -43,35 +43,6 @@ def catchExceptions(func):
     return wrapper
 
 
-class isReachedUrl:
-    def __init__(self, url: str):
-        self.url = url
-
-    def __call__(self, driver):
-        if '/#/page/' in driver.current_url:
-            return self.url == driver.current_url
-
-        current = self.splitUrl(driver.current_url)
-        if len(current) > 5:
-            # target = ['https', domain, sport, country, league, match]
-            target = self.splitUrl(self.url)
-            # sometimes league name is different
-            if current[:4] == target[:4] and current[5:] == target[5:]:
-                return True
-            else:
-                return False
-
-        return self.url == driver.current_url
-
-    @staticmethod
-    def splitUrl(url: str) -> List[str]:
-        url = url.split('/')
-        stop = [i for i in url if i.startswith('#')]
-        if stop:
-            url = url[:url.index(stop[0])]
-        return [i for i in url if i]
-
-
 class Grabber(object):
     browser: Browser
     user: User
@@ -81,7 +52,7 @@ class Grabber(object):
 
     def __init__(self, browser: Browser, cookiePath: str = None):
         self.browser = browser
-        self.browser.go = partial(self.browser.go, isReachedUrl=isReachedUrl)
+        self.browser.go = partial(self.browser.go, isReachedUrl=utils.isReachedUrl)
         self.user = User(self.browser)
         self.sportGrid = SportGrid(self.browser)
         self.leagueGrid = LeagueGrid(self.browser)

@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional
+from typing import List, Optional
 from paklib import ioutils
 
 from .config.selector import reCompiled
@@ -56,3 +56,37 @@ def getDateTimeFromString(s: str) -> datetime.datetime:
 def getOddValue(s: str) -> float:
     value = reCompiled.oddValue.findall(s)[0]
     return float(value)
+
+
+class isReachedUrl:
+    def __init__(self, url: str):
+        self.url = url
+        self.target = self.splitUrl(self.url)
+
+    def __call__(self, driver):
+        return self.isEqual(driver.current_url)
+
+    def isEqual(self, currentUrl):
+        if self.url == currentUrl:
+            return True
+
+        if '/#/page/' in self.url:
+            return self.url == currentUrl
+        elif self.target[-1] == 'results':
+            current = self.splitUrl(currentUrl)
+            if current[:4] == self.target[:4] and current[5:] == self.target[5:]:
+                return True
+            else:
+                return False
+        elif len(self.target) == 6:
+            return getMatchId(self.url) == getMatchId(currentUrl)
+        else:
+            return self.url == currentUrl
+
+    @staticmethod
+    def splitUrl(url: str) -> List[str]:
+        url = url.split('/')
+        stop = [i for i in url if i.startswith('#')]
+        if stop:
+            url = url[:url.index(stop[0])]
+        return [i for i in url if i]
