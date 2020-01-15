@@ -29,9 +29,10 @@ def getMatchSubTabName(name: str) -> Optional[str]:
 def getMatchId(url: str) -> str:
     # 'https://www.oddsportal.com/soccer/spain/laliga/atl-madrid-real-madrid-I9OmRkES/' -> 'I9OmRkES'
     assert names.baseUrl in url
+    if '#' in url:
+        url = url[:url.index('#')]
     matchId = url[url.rindex('-') + 1:]
-    if matchId[-1] == '/':
-        matchId = matchId[:-1]
+    matchId = matchId[:matchId.index('/')]
     assert matchId
     return matchId
 

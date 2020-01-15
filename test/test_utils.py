@@ -73,6 +73,9 @@ def test_matchId():
     url = 'https://www.oddsportal.com/soccer/spain/laliga/atl-madrid-real-madrid-I9OmRkES/'
     assert utils.getMatchId(url) == 'I9OmRkES'
 
+    url = 'https://www.oddsportal.com/soccer/spain/laliga/atl-madrid-real-madrid-I9OmRkES/#over-under;3'
+    assert utils.getMatchId(url) == 'I9OmRkES'
+
 
 def test_dateSportUrl():
     date = datetime.date(2019, 9, 19)
@@ -128,6 +131,8 @@ def test_isReachedUrl():
     target = 'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j3hAArYI/'
     assert utils.isReachedUrl(target).isEqual(
         'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j3hAArYI/')
+    assert utils.isReachedUrl(target).isEqual(
+        'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j3hAArYI/#over-under;3')
     assert not utils.isReachedUrl(target).isEqual(
         'https://www.oddsportal.com/soccer/france/ligue-1/nantes-toulouse-j2hAArYI/')
 
