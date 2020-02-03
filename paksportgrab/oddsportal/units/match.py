@@ -84,25 +84,31 @@ class Match:
         self.__dict__.update(attrs)
         return self
 
-    def getOdds(self, tab: str) -> Optional[List[float]]:
+    def getOdds(self, tab: str, value: Union[str, float] = None) -> Optional[List[float]]:
+        loc = self.odds[tab][self.scoreName]
+        if not loc:
+            return None
+
         if tab == names.tab.WDL:
-            loc = self.odds[tab][self.scoreName]
-            if not loc:
-                return None
             return [loc['1'], loc['X'], loc['2']]
 
         elif tab == names.tab.WL:
-            loc = self.odds[tab][self.scoreName]
-            if not loc:
-                return None
             return [loc['1'], loc['2']]
 
         elif tab == names.tab.total:
-            loc = self.odds[tab][self.scoreName][self.totBk]
+            if value is None or value == 'bk':
+                value = self.totBk
+            if value not in loc:
+                return None
+            loc = loc[value]
             return [loc['over'], loc['under']]
 
         elif tab == names.tab.handicap:
-            loc = self.odds[tab][self.scoreName][self.hpBk]
+            if value is None or value == 'bk':
+                value = self.hpBk
+            if value not in loc:
+                return None
+            loc = loc[value]
             return [loc['1'], loc['2']]
 
         else:
