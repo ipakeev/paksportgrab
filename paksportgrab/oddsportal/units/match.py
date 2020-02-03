@@ -85,6 +85,9 @@ class Match:
         return self
 
     def getOdds(self, tab: str, value: Union[str, float] = None) -> Optional[List[float]]:
+        if tab not in self.odds:
+            return None
+
         loc = self.odds[tab][self.scoreName]
         if not loc:
             return None
