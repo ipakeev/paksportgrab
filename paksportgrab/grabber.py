@@ -224,3 +224,63 @@ class Grabber(object):
                 match.odds[tabName][subTabName] = self.matchGrid.grab(tabName)
 
         match.filledOdds = True
+
+    def testMatch(self, sport: str, url: str):
+        oddsTabs = names.sportTabs[sport]
+
+        def getTabsNameList():
+            current = self.matchGrid.getCurrentTabName()
+            tabsNameList = list(oddsTabs.keys())
+            if current in tabsNameList:
+                return [current] + [i for i in tabsNameList if (i != current and i in tabs)]
+            else:
+                return [i for i in tabsNameList if i in tabs]
+
+        def getSubTabsNameList():
+            current = self.matchGrid.getCurrentSubTabName()
+            subTabsNameList = oddsTabs[tabName]
+            if current in subTabsNameList:
+                return [current] + [i for i in subTabsNameList if (i != current and i in subTabs)]
+            else:
+                return [i for i in subTabsNameList if i in subTabs]
+
+        def isReachedTab():
+            return self.matchGrid.getCurrentTabName() == tabName
+
+        def isReachedSubTab():
+            return self.matchGrid.getCurrentSubTabName() == subTabName
+
+        print(f'isReachedUrl: {utils.isReachedUrl(url)(self.browser.browser)}')
+        print(f'target: {url}, current: {self.browser.currentUrl}')
+
+        print(f'isLoadedGrid: {self.matchGrid.isLoadedGrid()}')
+        print(f'isEmpty: {self.matchGrid.isEmpty()}')
+        print(f'isReload: {self.matchGrid.isReload()}')
+
+        odds = {}
+        for tabName in oddsTabs.keys():
+            odds[tabName] = {subTabName: None for subTabName in oddsTabs[tabName]}
+
+        tabs = self.matchGrid.getTabs()
+        print(f'tabs: {tabs.keys()}')
+        for tabName in getTabsNameList():
+            print(f'> tab: {tabName}')
+            if not isReachedTab():
+                print(f'click on {tabName}')
+                self.browser.click(tabs[tabName],
+                                   until=(self.matchGrid.isLoadedGrid, isReachedTab),
+                                   reload=self.matchGrid.isReload)
+                print(f'res: [{self.matchGrid.isLoadedGrid()}, {isReachedTab()}], [{self.matchGrid.isReload()}')
+
+            subTabs = self.matchGrid.getSubTabs()
+            print(f'subTabs: {subTabs}')
+            for subTabName in getSubTabsNameList():
+                print(f'> subTab: {subTabName}')
+                if not isReachedSubTab():
+                    print(f'click on {subTabName}')
+                    self.browser.click(subTabs[subTabName],
+                                       until=(self.matchGrid.isLoadedGrid, isReachedSubTab),
+                                       reload=self.matchGrid.isReload)
+                    print(f'res: [{self.matchGrid.isLoadedGrid()}, {isReachedSubTab()}], [{self.matchGrid.isReload()}')
+
+                print(self.matchGrid.grab(tabName))
