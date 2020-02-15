@@ -28,6 +28,10 @@ def catchExceptions(func):
             except StaleElementReferenceException:
                 # when click was wrong
                 pass
+            except AssertionError:
+                # when unknown error (tab name)
+                print('>!> Assertion error')
+                print(func, args, kwargs)
             except WebDriverException:
                 # when browser is closed
                 crash += 1
