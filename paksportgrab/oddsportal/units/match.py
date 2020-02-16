@@ -150,10 +150,11 @@ class Match:
             self.scoreString = scoreString.text
             if self.scoreString in names.cancelledTypes:
                 self.setCanceled()
-            elif 'live-score' in scoreString.getAttribute('class'):
+            elif 'live-score' in scoreString.getAttribute('class') or 'live-score' in time.getAttribute('class'):
                 self.setLive()
             else:
                 self.setFinished()
+                assert self.dateTime
         else:
             self.scoreString = None
             self.setNotStarted()

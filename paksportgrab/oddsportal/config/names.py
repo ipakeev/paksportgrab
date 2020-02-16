@@ -178,3 +178,9 @@ tableOrValueGrid = {
 baseUrl = 'https://www.oddsportal.com/'
 cancelledTypes = ['award.', 'canc.', 'postp.', 'abn.', 'w.o.', 'int.', 'TF']
 cookiePath = './cookies/'
+
+train = 'train'
+test = 'test'
+val = 'val'
+ttv = ['train', 'test', 'val']
+test_val = ['test', 'val']
