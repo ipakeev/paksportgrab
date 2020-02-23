@@ -24,7 +24,7 @@ class SportPage:
     kickOffTimeTab = (By.CSS_SELECTOR, '#sort_time > a')
     eventsTab = (By.CSS_SELECTOR, '#sort_events > a')
     grid = (By.CSS_SELECTOR, '#table-matches > table > tbody > tr')
-    gridElement = (By.CSS_SELECTOR, '#table-matches > table > tbody > tr.odd')
+    gridElement = (By.CSS_SELECTOR, '#table-matches > table > tbody > tr > td.table-time')
     error = (By.CSS_SELECTOR, '#col-content > h1')  # ????
 
 
