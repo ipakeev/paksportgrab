@@ -132,6 +132,7 @@ subTabName = {
     '1st Half Innings': subTab.h1,
     '1st Period': subTab.h1,
     '2nd Half': subTab.h2,
+    '2nd Half Innings': subTab.h2,
     '2nd Period': subTab.h2,
     '3rd Period': subTab.h3,
     '1Q': subTab.q1,
