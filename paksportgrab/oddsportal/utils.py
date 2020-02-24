@@ -15,7 +15,7 @@ def getMatchTabName(name: str) -> Optional[str]:
         return
     if name in names.tabName:
         return names.tabName[name]
-    raise KeyError(f'>!> Unknown tab: {name}')
+    print(f'>!> Unknown tab: {name}')
 
 
 def getMatchSubTabName(name: str) -> Optional[str]:
@@ -23,7 +23,7 @@ def getMatchSubTabName(name: str) -> Optional[str]:
         return
     if name in names.subTabName:
         return names.subTabName[name]
-    raise KeyError(f'>!> Unknown subTab: {name}')
+    print(f'>!> Unknown subTab: {name}')
 
 
 def getMatchId(url: str) -> str:
