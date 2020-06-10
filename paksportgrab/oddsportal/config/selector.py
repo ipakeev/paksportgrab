@@ -3,8 +3,8 @@ from selenium.webdriver.common.by import By
 
 
 class ReCompiled:
-    date = re.compile(r'(\d\d) (\w\w\w) (\d{4})')
-    dateTime = re.compile(r'(\d\d) (\w\w\w) (\d{4}).+?(\d\d:\d\d)')
+    date = re.compile(r'(\d\d) (\w+?) (\d{4})')
+    dateTime = re.compile(r'(\d\d) (\w+?) (\d{4}).+?(\d\d:\d\d)')
     oddValue = re.compile(r'([+-]?\d[.\d]*$)')
 
 

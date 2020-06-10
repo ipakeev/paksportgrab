@@ -60,14 +60,14 @@ def test_text(grabber: Grabber, match: Match):
 
 
 def test_grid(match: Match):
-    assert match.odds[names.tab.WDL][names.subTab.ft] == {'1': 1.78, 'X': 3.42, '2': 4.68, 'bkNum': 13}
-    assert match.odds[names.tab.WDL][names.subTab.h1] == {'1': 2.42, 'X': 2.04, '2': 4.99, 'bkNum': 10}
+    assert match.odds[names.tab.WDL][names.subTab.ft] == {'1': 1.79, 'X': 3.45, '2': 4.68, 'bkNum': 12}
+    assert match.odds[names.tab.WDL][names.subTab.h1] == {'1': 2.42, 'X': 2.05, '2': 5.08, 'bkNum': 9}
 
-    assert match.odds[names.tab.handicap][names.subTab.ft][0] == {'1': 1.31, '2': 3.52, 'bkNum': 6}
+    assert match.odds[names.tab.handicap][names.subTab.ft][0] == {'1': 1.3, '2': 3.54, 'bkNum': 6}
     assert len(match.odds[names.tab.handicap][names.subTab.ft]) == 18
 
-    assert match.odds[names.tab.total][names.subTab.ft][2.5] == {'over': 2.22, 'under': 1.64, 'bkNum': 11}
-    assert match.odds[names.tab.total][names.subTab.h1][1] == {'over': 2.21, 'under': 1.66, 'bkNum': 3}
+    assert match.odds[names.tab.total][names.subTab.ft][2.5] == {'over': 2.24, 'under': 1.66, 'bkNum': 10}
+    assert match.odds[names.tab.total][names.subTab.h1][1] == {'over': 2.18, 'under': 1.71, 'bkNum': 3}
 
     assert len(match.odds[names.tab.total][names.subTab.ft]) == 13
-    assert len(match.odds[names.tab.total][names.subTab.h1]) == 7
+    assert len(match.odds[names.tab.total][names.subTab.h1]) == 6

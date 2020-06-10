@@ -1,2 +1,2 @@
-username: str = ''
-password: str = ''
+username: str = 'Ipakeev'
+password: str = 'Iv333664an'

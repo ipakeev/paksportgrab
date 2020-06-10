@@ -44,12 +44,12 @@ def getDateSportUrl(sport: str, date: datetime.date) -> str:
 
 def getDateFromString(s: str) -> datetime.date:
     day, month, year = reCompiled.date.findall(s)[0]
-    return datetime.datetime.strptime(f'{day} {month} {year}', '%d %b %Y').date()
+    return datetime.datetime.strptime(f'{day} {month} {year}', '%d %B %Y').date()
 
 
 def getDateTimeFromString(s: str) -> datetime.datetime:
     day, month, year, tt = reCompiled.dateTime.findall(s)[0]
-    date = datetime.datetime.strptime(f'{day} {month} {year}', '%d %b %Y').date()
+    date = datetime.datetime.strptime(f'{day} {month} {year}', '%d %B %Y').date()
     time = datetime.time.fromisoformat(tt)
     return datetime.datetime.combine(date, time)
 

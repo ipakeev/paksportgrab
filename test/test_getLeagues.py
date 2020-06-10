@@ -11,7 +11,7 @@ def sport():
 
 @pytest.fixture(scope='module')
 def date():
-    return datetime.date(2020, 1, 4)
+    return datetime.date(2020, 6, 10)
 
 
 @pytest.fixture(scope='class')
@@ -47,10 +47,10 @@ class TestSportGrid:
     def test_league(self, leagues, sport):
         league = leagues[1]
         assert league.sport == sport
-        assert league.country == 'Cuba'
-        assert league.league == 'Serie Nacional'
-        assert league.leagueUrl == 'https://www.oddsportal.com/baseball/cuba/serie-nacional/results/'
-        assert len(league.nextMatches) == 2
+        assert league.country == 'South Korea'
+        assert league.league == 'KBO'
+        assert league.leagueUrl == 'https://www.oddsportal.com/baseball/south-korea/kbo/results/'
+        assert len(league.nextMatches) == 4
 
     def test_match(self, leagues, date):
         league = leagues[1]
@@ -60,13 +60,13 @@ class TestSportGrid:
         assert match.league == league.league
 
         assert match.date == date
-        assert match.time == datetime.time(4, 30)
-        assert match.teams == ['Industriales', 'Camaguey']
-        assert match.url == 'https://www.oddsportal.com/baseball/cuba/serie-nacional/industriales-camaguey-tQIeN0fj/'
-        assert match.id == 'tQIeN0fj'
-        assert match.scoreString == '8:9'
+        assert match.time == datetime.time(12, 30)
+        assert match.teams == ['Lotte Giants', 'Hanwha Eagles']
+        assert match.url == 'https://www.oddsportal.com/baseball/south-korea/kbo/lotte-giants-hanwha-eagles-CxsNnaBL/'
+        assert match.id == 'CxsNnaBL'
+        assert match.scoreString == '12:2'
         assert match.odds == {}
-        assert match.bkNum == 3
+        assert match.bkNum == 11
         assert match.finished
 
     def test_matchSets(self, leagues):
