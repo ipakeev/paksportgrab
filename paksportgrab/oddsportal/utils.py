@@ -15,7 +15,7 @@ def getMatchTabName(name: str) -> Optional[str]:
         return
     if name in names.tabName:
         return names.tabName[name]
-    print(f'>!> Unknown tab: {name}')
+    raise KeyError(f'>!> Unknown tab: {name}')
 
 
 def getMatchSubTabName(name: str) -> Optional[str]:
@@ -23,7 +23,7 @@ def getMatchSubTabName(name: str) -> Optional[str]:
         return
     if name in names.subTabName:
         return names.subTabName[name]
-    print(f'>!> Unknown subTab: {name}')
+    raise KeyError(f'>!> Unknown tab: {name}')
 
 
 def getMatchId(url: str) -> str:
@@ -44,12 +44,18 @@ def getDateSportUrl(sport: str, date: datetime.date) -> str:
 
 def getDateFromString(s: str) -> datetime.date:
     day, month, year = reCompiled.date.findall(s)[0]
-    return datetime.datetime.strptime(f'{day} {month} {year}', '%d %B %Y').date()
+    try:
+        return datetime.datetime.strptime(f'{day} {month} {year}', '%d %b %Y').date()
+    except ValueError:
+        return datetime.datetime.strptime(f'{day} {month} {year}', '%d %B %Y').date()
 
 
 def getDateTimeFromString(s: str) -> datetime.datetime:
     day, month, year, tt = reCompiled.dateTime.findall(s)[0]
-    date = datetime.datetime.strptime(f'{day} {month} {year}', '%d %B %Y').date()
+    try:
+        date = datetime.datetime.strptime(f'{day} {month} {year}', '%d %b %Y').date()
+    except ValueError:
+        date = datetime.datetime.strptime(f'{day} {month} {year}', '%d %B %Y').date()
     time = datetime.time.fromisoformat(tt)
     return datetime.datetime.combine(date, time)
 
