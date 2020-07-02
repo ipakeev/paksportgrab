@@ -1,9 +1,10 @@
 import datetime
 from typing import List, Optional
+
 from paklib import ioutils
 
-from .config.selector import reCompiled
 from .config import names
+from .config.selector import reCompiled
 
 
 def getSportName(name: str) -> str:

@@ -1,8 +1,8 @@
 import datetime
-from typing import List, Dict, Optional, Union
 from copy import deepcopy
-from pakselenium.browser import Browser, PageElement
-from selenium.webdriver.common.by import By
+from typing import List, Dict, Optional, Union
+
+from pakselenium import Browser, PageElement, Selector, By
 
 from .border import Border
 from .. import utils
@@ -124,17 +124,17 @@ class Match:
     def parse(self, browser: Browser, border: Border, pe: PageElement):
         self.date = border.date
 
-        time = browser.findElementFrom(pe, (By.CSS_SELECTOR, 'td.table-time'))
+        time = browser.find_element_from(pe, Selector(By.CSS_SELECTOR, 'td.table-time'))
         try:
             self.time = datetime.time.fromisoformat(time.text)
             self.dateTime = datetime.datetime.combine(self.date, self.time)
         except ValueError:
             self.time = time.text
 
-        teams = browser.findElementFrom(pe, (By.CSS_SELECTOR, 'td.name'))
+        teams = browser.find_element_from(pe, Selector(By.CSS_SELECTOR, 'td.name'))
         self.teams = teams.text.split(' - ')
-        url = browser.findElementsFrom(teams, (By.CSS_SELECTOR, 'a'))
-        url = [i.getAttribute('href') for i in url]
+        url = browser.find_elements_from(teams, Selector(By.CSS_SELECTOR, 'a'))
+        url = [i.get_attribute('href') for i in url]
         if len(url) == 1:
             self.url = url[0]
         else:
@@ -143,14 +143,14 @@ class Match:
             self.url = url[0]
         self.id = utils.getMatchId(self.url)
 
-        scoreString = browser.findElementsFrom(pe, (By.CSS_SELECTOR, 'td.table-score'))
+        scoreString = browser.find_elements_from(pe, Selector(By.CSS_SELECTOR, 'td.table-score'))
         if scoreString:
             assert len(scoreString) == 1
             scoreString = scoreString[0]
             self.scoreString = scoreString.text
             if self.scoreString in names.cancelledTypes:
                 self.setCanceled()
-            elif 'live-score' in scoreString.getAttribute('class') or 'live-score' in time.getAttribute('class'):
+            elif 'live-score' in scoreString.get_attribute('class') or 'live-score' in time.get_attribute('class'):
                 self.setLive()
             else:
                 self.setFinished()
@@ -170,7 +170,7 @@ class Match:
         # }
         self.odds = {}
 
-        bkNum = browser.findElementFrom(pe, (By.CSS_SELECTOR, 'td.info-value'))
+        bkNum = browser.find_element_from(pe, Selector(By.CSS_SELECTOR, 'td.info-value'))
         try:
             self.bkNum = int(bkNum.text)
         except ValueError:

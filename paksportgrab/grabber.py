@@ -1,19 +1,20 @@
+import datetime
 import re
 import time
-import datetime
 from functools import partial
 from typing import Optional, Union, List, Tuple, Callable
+
 from pakselenium import Browser
 from selenium.common.exceptions import WebDriverException, StaleElementReferenceException
 
-from .oddsportal.user import User
-from .oddsportal.sportGrid import SportGrid
+from .oddsportal import utils
+from .oddsportal.config import names, GLOBAL
 from .oddsportal.leagueGrid import LeagueGrid
 from .oddsportal.matchGrid import MatchGrid
+from .oddsportal.sportGrid import SportGrid
 from .oddsportal.units.league import League, SeasonDescribe
 from .oddsportal.units.match import Match
-from .oddsportal.config import names, GLOBAL
-from .oddsportal import utils
+from .oddsportal.user import User
 
 
 def catchExceptions(func):
@@ -56,7 +57,7 @@ class Grabber(object):
 
     def __init__(self, browser: Browser, cookiePath: str = None):
         self.browser = browser
-        self.browser.go = partial(self.browser.go, isReachedUrl=utils.isReachedUrl)
+        self.browser.go = partial(self.browser.go, is_reached_url=utils.isReachedUrl)
         self.user = User(self.browser)
         self.sportGrid = SportGrid(self.browser)
         self.leagueGrid = LeagueGrid(self.browser)
@@ -66,7 +67,7 @@ class Grabber(object):
             names.cookiePath = cookiePath
 
     def newBrowserSession(self):
-        self.browser.newSession()
+        self.browser.new_session()
         self.user.login()
 
     def login(self, username: str, password: str):
@@ -104,7 +105,7 @@ class Grabber(object):
 
         if self.leagueGrid.isVisibleSeasonTabs():
             seasons = self.leagueGrid.getSeasonTabs()
-            return [SeasonDescribe(name=i.text, url=i.getAttribute('href')) for i in seasons]
+            return [SeasonDescribe(name=i.text, url=i.get_attribute('href')) for i in seasons]
         else:
             return []
 
@@ -124,9 +125,9 @@ class Grabber(object):
             return matches
 
         seasonElements = self.leagueGrid.getSeasonTabs()
-        seasonsUrls = {i.text: i.getAttribute('href') for i in seasonElements}
+        seasonsUrls = {i.text: i.get_attribute('href') for i in seasonElements}
         seasonNames = [i.text for i in seasonElements]  # new list because needs course of seasons
-        start = [i.getAttribute('href') for i in seasonElements].index(leagueUrl)
+        start = [i.get_attribute('href') for i in seasonElements].index(leagueUrl)
         assert start < seasonsDepth
         seasonNames = seasonNames[start:seasonsDepth]
 
@@ -154,7 +155,7 @@ class Grabber(object):
                     self.leagueGrid.nextPage()
 
             seasonElements = self.leagueGrid.getSeasonTabs()
-            seasonsUrls = {i.text: i.getAttribute('href') for i in seasonElements}
+            seasonsUrls = {i.text: i.get_attribute('href') for i in seasonElements}
 
         return matches
 
@@ -215,14 +216,14 @@ class Grabber(object):
         for tabName in getTabsNameList():
             if not isReachedTab():
                 self.browser.click(tabs[tabName],
-                                   until=(self.matchGrid.isLoadedGrid, isReachedTab),
+                                   until=[self.matchGrid.isLoadedGrid, isReachedTab],
                                    reload=self.matchGrid.isReload)
 
             subTabs = self.matchGrid.getSubTabs()
             for subTabName in getSubTabsNameList():
                 if not isReachedSubTab():
                     self.browser.click(subTabs[subTabName],
-                                       until=(self.matchGrid.isLoadedGrid, isReachedSubTab),
+                                       until=[self.matchGrid.isLoadedGrid, isReachedSubTab],
                                        reload=self.matchGrid.isReload)
 
                 match.odds[tabName][subTabName] = self.matchGrid.grab(tabName)
@@ -254,8 +255,8 @@ class Grabber(object):
         def isReachedSubTab():
             return self.matchGrid.getCurrentSubTabName() == subTabName
 
-        print(f'isReachedUrl: {utils.isReachedUrl(url)(self.browser.browser)}')
-        print(f'target: {url}, current: {self.browser.currentUrl}')
+        print(f'isReachedUrl: {utils.isReachedUrl(url)(self.browser.driver)}')
+        print(f'target: {url}, current: {self.browser.current_url}')
 
         print(f'isLoadedGrid: {self.matchGrid.isLoadedGrid()}')
         print(f'isEmpty: {self.matchGrid.isEmpty()}')
@@ -272,7 +273,7 @@ class Grabber(object):
             if not isReachedTab():
                 print(f'click on {tabName}')
                 self.browser.click(tabs[tabName],
-                                   until=(self.matchGrid.isLoadedGrid, isReachedTab),
+                                   until=[self.matchGrid.isLoadedGrid, isReachedTab],
                                    reload=self.matchGrid.isReload)
                 print(f'res: [{self.matchGrid.isLoadedGrid()}, {isReachedTab()}], [{self.matchGrid.isReload()}')
 
@@ -283,7 +284,7 @@ class Grabber(object):
                 if not isReachedSubTab():
                     print(f'click on {subTabName}')
                     self.browser.click(subTabs[subTabName],
-                                       until=(self.matchGrid.isLoadedGrid, isReachedSubTab),
+                                       until=[self.matchGrid.isLoadedGrid, isReachedSubTab],
                                        reload=self.matchGrid.isReload)
                     print(f'res: [{self.matchGrid.isLoadedGrid()}, {isReachedSubTab()}], [{self.matchGrid.isReload()}')
 

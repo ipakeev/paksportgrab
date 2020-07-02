@@ -1,15 +1,16 @@
 import datetime
 from typing import List
+
 from pakselenium import Browser
 
 from . import utils
+from .config import GLOBAL
 from .config.selector import sportPage
 from .grid import Grid
 from .units.border import SportGridBorder
-from .units.sport import Sport
 from .units.league import League
 from .units.match import Match
-from .config import GLOBAL
+from .units.sport import Sport
 
 
 def catchExceptions(func):
@@ -38,31 +39,27 @@ class SportGrid(Grid):
         self.browser = browser
 
     def getCurrentDate(self) -> datetime.date:
-        pe = self.browser.findElement(sportPage.date)
+        pe = self.browser.find_element(sportPage.date)
         return utils.getDateFromString(pe.text)
 
     def getCurrentSport(self) -> str:
-        if self.browser.isOnPage(sportPage.moreSport):  # for sport in hidden tab
-            pe = self.browser.findElement(sportPage.moreSport)
+        if self.browser.is_on_page(sportPage.moreSport):  # for sport in hidden tab
+            pe = self.browser.find_element(sportPage.moreSport)
             if not pe.text or pe.text == 'More':
-                pe = self.browser.findElement(sportPage.currentSport)
+                pe = self.browser.find_element(sportPage.currentSport)
         else:
-            pe = self.browser.findElement(sportPage.currentSport)
+            pe = self.browser.find_element(sportPage.currentSport)
         return utils.getSportName(pe.text)
 
     def switchToEvents(self):
         if self.isSwitchedToEvents():
             return
-
-        pe = self.browser.findElement(sportPage.eventsTab)
-        self.browser.click(pe, until=(self.isLoadedGrid, self.isSwitchedToEvents))
+        self.browser.click(sportPage.eventsTab, until=[self.isLoadedGrid, self.isSwitchedToEvents])
 
     def switchToKickOffTime(self):
         if self.isSwitchedToKickOffTime():
             return
-
-        pe = self.browser.findElement(sportPage.kickOffTimeTab)
-        self.browser.click(pe, until=(self.isLoadedGrid, self.isSwitchedToKickOffTime))
+        self.browser.click(sportPage.kickOffTimeTab, until=[self.isLoadedGrid, self.isSwitchedToKickOffTime])
 
     @catchExceptions
     def grab(self) -> List[League]:
@@ -70,8 +67,8 @@ class SportGrid(Grid):
         border.sport = self.getCurrentSport()
         border.date = self.getCurrentDate()
         sport = Sport()
-        for row in self.browser.findElements(sportPage.grid):
-            cl = row.getAttribute('class')
+        for row in self.browser.find_elements(sportPage.grid):
+            cl = row.get_attribute('class')
             if 'deactivate' in cl or cl == 'odd' or cl == '':  # матч
                 m = Match().parse(self.browser, border, row)
                 sport.addMatch(border, m)
@@ -84,10 +81,10 @@ class SportGrid(Grid):
         return sport.leagues
 
     def isLoadedGrid(self) -> bool:
-        return self.browser.isOnPage(sportPage.gridElement)
+        return self.browser.is_on_page(sportPage.gridElement)
 
     def isSwitchedToEvents(self) -> bool:
-        return self.browser.findElement(sportPage.currentSortTab).text == 'Events'
+        return self.browser.find_element(sportPage.currentSortTab).text == 'Events'
 
     def isSwitchedToKickOffTime(self) -> bool:
-        return self.browser.findElement(sportPage.currentSortTab).text == 'Kick off time'
+        return self.browser.find_element(sportPage.currentSortTab).text == 'Kick off time'

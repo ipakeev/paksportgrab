@@ -1,11 +1,13 @@
-import collections
 import datetime
-from typing import List, Optional
+from typing import List, Optional, NamedTuple
 
 from .border import Border
 from .match import Match
 
-SeasonDescribe = collections.namedtuple('SeasonDescribe', ['name', 'url'])
+
+class SeasonDescribe(NamedTuple):
+    name: str
+    url: str
 
 
 class League(object):

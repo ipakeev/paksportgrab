@@ -9,14 +9,14 @@ class Grid(object):
 
     @property
     def msg(self) -> str:
-        if self.browser.isOnPage(message.msg):
-            return self.browser.findElement(message.msg).text
+        if self.browser.is_on_page(message.msg):
+            return self.browser.find_element(message.msg).text
         else:
             return ''
 
     def isInternetError(self):
-        if self.browser.isOnPage(message.internetError):
-            msg = self.browser.findElement(message.internetError).text
+        if self.browser.is_on_page(message.internetError):
+            msg = self.browser.find_element(message.internetError).text
             if msg == 'Нет подключения к Интернету':
                 return True
         return False
@@ -33,7 +33,7 @@ class Grid(object):
             elif 'try again' in self.msg:
                 return False
             else:
-                print('msg: {} : {}'.format(msg, self.browser.currentUrl))
+                print('msg: {} : {}'.format(msg, self.browser.current_url))
 
         return False
 
