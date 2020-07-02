@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='paksportgrab',
-    version='0.3.10',
+    version='0.3.11',
     packages=find_packages(),
     url='https://github.com/ipakeev',
     license='MIT',

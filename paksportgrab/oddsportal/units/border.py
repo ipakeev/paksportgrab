@@ -26,7 +26,7 @@ class SportGridBorder(Border):
         country, league = pes
         self.country = country.text
         self.league = league.text
-        self.leagueUrl = league.getAttribute('href') + 'results/'
+        self.leagueUrl = league.get_attribute('href') + 'results/'
 
         # [cl, *odds, bkNum]
         pes = browser.find_elements_from(pe, Selector(By.CSS_SELECTOR, 'th'))
