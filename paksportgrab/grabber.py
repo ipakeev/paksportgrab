@@ -2,9 +2,9 @@ import datetime
 import re
 import time
 from functools import partial
-from typing import Optional, Union, List, Tuple, Callable
+from typing import Optional, Union, List, Callable
 
-from pakselenium import Browser
+from pakselenium import Browser, Selector
 from selenium.common.exceptions import WebDriverException, StaleElementReferenceException
 
 from .oddsportal import utils
@@ -48,7 +48,7 @@ def catchExceptions(func):
     return wrapper
 
 
-class Grabber(object):
+class Grabber:
     browser: Browser
     user: User
     sportGrid: SportGrid
@@ -75,11 +75,12 @@ class Grabber(object):
         self.user.login()
 
     def go(self, url: str,
-           until: Union[Callable, Tuple[Callable, ...]] = None,
+           until: Union[Callable, List[Callable]] = None,
+           until_lost: Union[Selector, List[Selector]] = None,
            empty: Callable = None,
            reload: Callable = None):
         while 1:
-            self.browser.go(url, until=until, empty=empty, reload=reload)
+            self.browser.go(url, until=until, until_lost=until_lost, empty=empty, reload=reload)
             if self.user.isLoggedIn():
                 break
             else:
@@ -136,7 +137,7 @@ class Grabber(object):
                 continue
             url = seasonsUrls[seasonName]
             if not isReachedSeason():
-                self.go(url, until=(self.leagueGrid.isLoadedGrid, isReachedSeason),
+                self.go(url, until=[self.leagueGrid.isLoadedGrid, isReachedSeason],
                         empty=self.leagueGrid.isEmpty, reload=self.leagueGrid.isReload)
 
             if not self.leagueGrid.isEmpty():
