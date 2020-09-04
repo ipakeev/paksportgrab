@@ -17,7 +17,7 @@ from .oddsportal.units.match import Match
 from .oddsportal.user import User
 
 
-def catchExceptions(func):
+def catch_exceptions(func):
     def wrapper(self, *args, **kwargs):
         if GLOBAL.debug:
             return func(self, *args, **kwargs)
@@ -38,7 +38,7 @@ def catchExceptions(func):
                 crash += 1
                 if crash == 5:
                     print('>!> new session')
-                    self.newBrowserSession()
+                    self.new_browser_session()
                     crash = 0
             except Exception as e:
                 print(func, args, kwargs)
@@ -51,27 +51,27 @@ def catchExceptions(func):
 class Grabber:
     browser: Browser
     user: User
-    sportGrid: SportGrid
-    leagueGrid: LeagueGrid
-    matchGrid: MatchGrid
+    sport_grid: SportGrid
+    league_grid: LeagueGrid
+    match_grid: MatchGrid
 
-    def __init__(self, browser: Browser, cookiePath: str = None):
+    def __init__(self, browser: Browser, cookie_path: str = None):
         self.browser = browser
-        self.browser.go = partial(self.browser.go, is_reached_url=utils.isReachedUrl)
+        self.browser.go = partial(self.browser.go, is_reached_url=utils.is_reached_url)
         self.user = User(self.browser)
-        self.sportGrid = SportGrid(self.browser)
-        self.leagueGrid = LeagueGrid(self.browser)
-        self.matchGrid = MatchGrid(self.browser)
+        self.sport_grid = SportGrid(self.browser)
+        self.league_grid = LeagueGrid(self.browser)
+        self.match_grid = MatchGrid(self.browser)
 
-        if cookiePath is not None:
-            names.cookiePath = cookiePath
+        if cookie_path is not None:
+            names.cookie_path = cookie_path
 
-    def newBrowserSession(self):
+    def new_browser_session(self):
         self.browser.new_session()
         self.user.login()
 
     def login(self, username: str, password: str):
-        self.user.setLoginData(username, password)
+        self.user.set_login_data(username, password)
         self.user.login()
 
     def go(self, url: str,
@@ -81,212 +81,213 @@ class Grabber:
            reload: Callable = None):
         while 1:
             self.browser.go(url, until=until, until_lost=until_lost, empty=empty, reload=reload)
-            if self.user.isLoggedIn():
+            if self.user.is_logged_in():
                 break
             else:
                 self.user.login()
 
-    @catchExceptions
-    def getLeagues(self, sport: str, date: datetime.date) -> Optional[List[League]]:
-        url = utils.getDateSportUrl(sport, date)
+    @catch_exceptions
+    def get_leagues(self, sport: str, date: datetime.date) -> Optional[List[League]]:
+        url = utils.get_date_sport_url(sport, date)
 
-        self.go(url, until=self.sportGrid.isLoadedGrid,
-                empty=self.sportGrid.isEmpty, reload=self.sportGrid.isReload)
+        self.go(url, until=self.sport_grid.is_loaded_grid,
+                empty=self.sport_grid.is_empty, reload=self.sport_grid.is_reload)
 
-        if self.sportGrid.isEmpty():
+        if self.sport_grid.is_empty():
             return None
 
-        self.sportGrid.switchToEvents()
-        return self.sportGrid.grab()
+        self.sport_grid.switch_to_events()
+        return self.sport_grid.grab()
 
-    @catchExceptions
-    def getSeasons(self, leagueUrl: str) -> List[SeasonDescribe]:
-        self.go(leagueUrl, until=self.leagueGrid.isLoadedGrid,
-                empty=self.leagueGrid.isEmpty, reload=self.leagueGrid.isReload)
+    @catch_exceptions
+    def get_seasons(self, league_url: str) -> List[SeasonDescribe]:
+        self.go(league_url, until=self.league_grid.is_loaded_grid,
+                empty=self.league_grid.is_empty, reload=self.league_grid.is_reload)
 
-        if self.leagueGrid.isVisibleSeasonTabs():
-            seasons = self.leagueGrid.getSeasonTabs()
+        if self.league_grid.is_visible_season_tabs():
+            seasons = self.league_grid.get_season_tabs()
             return [SeasonDescribe(name=i.text, url=i.get_attribute('href')) for i in seasons]
         else:
             return []
 
-    @catchExceptions
-    def getMatches(self, leagueUrl: str, tillMatchId: str = None,
-                   seasonsDepth: int = 5, seasonMin='2014') -> List[Match]:
-        def isReachedSeason():
-            if self.leagueGrid.isVisibleSeasonTabs():
-                return self.leagueGrid.getCurrentSeasonName() == seasonName
+    @catch_exceptions
+    def get_matches(self, league_url: str, till_match_id: str = None,
+                    seasons_depth: int = 5, season_min='2014') -> List[Match]:
+        def is_reached_season():
+            if self.league_grid.is_visible_season_tabs():
+                return self.league_grid.get_current_season_name() == season_name
 
-        self.go(leagueUrl, until=self.leagueGrid.isLoadedGrid,
-                empty=self.leagueGrid.isEmpty, reload=self.leagueGrid.isReload)
+        self.go(league_url, until=self.league_grid.is_loaded_grid,
+                empty=self.league_grid.is_empty, reload=self.league_grid.is_reload)
 
         matches = []
 
-        if self.leagueGrid.isEmpty():
+        if self.league_grid.is_empty():
             return matches
 
-        seasonElements = self.leagueGrid.getSeasonTabs()
-        seasonsUrls = {i.text: i.get_attribute('href') for i in seasonElements}
-        seasonNames = [i.text for i in seasonElements]  # new list because needs course of seasons
-        start = [i.get_attribute('href') for i in seasonElements].index(leagueUrl)
-        assert start < seasonsDepth
-        seasonNames = seasonNames[start:seasonsDepth]
+        season_elements = self.league_grid.get_season_tabs()
+        seasons_urls = {i.text: i.get_attribute('href') for i in season_elements}
+        season_names = [i.text for i in season_elements]  # new list because needs course of seasons
+        start = [i.get_attribute('href') for i in season_elements].index(league_url)
+        assert start < seasons_depth
+        season_names = season_names[start:seasons_depth]
 
-        for seasonName in seasonNames:
-            if re.findall(r'(\d{4})', seasonName)[0] < seasonMin:
+        for season_name in season_names:
+            if re.findall(r'(\d{4})', season_name)[0] < season_min:
                 continue
-            url = seasonsUrls[seasonName]
-            if not isReachedSeason():
-                self.go(url, until=[self.leagueGrid.isLoadedGrid, isReachedSeason],
-                        empty=self.leagueGrid.isEmpty, reload=self.leagueGrid.isReload)
+            url = seasons_urls[season_name]
+            if not is_reached_season():
+                self.go(url, until=[self.league_grid.is_loaded_grid, is_reached_season],
+                        empty=self.league_grid.is_empty, reload=self.league_grid.is_reload)
 
-            if not self.leagueGrid.isEmpty():
+            if not self.league_grid.is_empty():
                 while 1:
-                    new = self.leagueGrid.grab()
+                    new = self.league_grid.grab()
                     for m in new:
-                        m.season = seasonName
+                        m.season = season_name
                     matches.extend(new)
 
-                    if tillMatchId:
-                        if tillMatchId in [i.id for i in new]:
+                    if till_match_id:
+                        if till_match_id in [i.id for i in new]:
                             return matches
 
-                    if self.leagueGrid.isEndOfSeason():
+                    if self.league_grid.is_end_of_season():
                         break
-                    self.leagueGrid.nextPage()
+                    self.league_grid.next_page()
 
-            seasonElements = self.leagueGrid.getSeasonTabs()
-            seasonsUrls = {i.text: i.get_attribute('href') for i in seasonElements}
+            season_elements = self.league_grid.get_season_tabs()
+            seasons_urls = {i.text: i.get_attribute('href') for i in season_elements}
 
         return matches
 
-    @catchExceptions
-    def fillMatch(self, match: Match, fillFinished=False):
-        if match.filledScore and match.filledOdds:
+    @catch_exceptions
+    def fill_match(self, match: Match, fill_finished=False):
+        if match.filled_score and match.filled_odds:
             return
-        oddsTabs = names.sportTabs[match.sport]
+        odds_tabs = names.sport_tabs[match.sport]
 
-        def getTabsNameList():
-            current = self.matchGrid.getCurrentTabName()
-            tabsNameList = list(oddsTabs.keys())
-            if current in tabsNameList:
-                return [current] + [i for i in tabsNameList if (i != current and i in tabs)]
+        def get_tabs_name_list():
+            current = self.match_grid.get_current_tab_name()
+            tabs_name_list = list(odds_tabs.keys())
+            if current in tabs_name_list:
+                return [current] + [i for i in tabs_name_list if (i != current and i in tabs)]
             else:
-                return [i for i in tabsNameList if i in tabs]
+                return [i for i in tabs_name_list if i in tabs]
 
-        def getSubTabsNameList():
-            current = self.matchGrid.getCurrentSubTabName()
-            subTabsNameList = oddsTabs[tabName]
-            if current in subTabsNameList:
-                return [current] + [i for i in subTabsNameList if (i != current and i in subTabs)]
+        def get_sub_tabs_name_list():
+            current = self.match_grid.get_current_sub_tab_name()
+            sub_tabs_name_list = odds_tabs[tab_name]
+            if current in sub_tabs_name_list:
+                return [current] + [i for i in sub_tabs_name_list if (i != current and i in subTabs)]
             else:
-                return [i for i in subTabsNameList if i in subTabs]
+                return [i for i in sub_tabs_name_list if i in subTabs]
 
-        def isReachedTab():
-            return self.matchGrid.getCurrentTabName() == tabName
+        def is_reached_tab():
+            return self.match_grid.get_current_tab_name() == tab_name
 
-        def isReachedSubTab():
-            return self.matchGrid.getCurrentSubTabName() == subTabName
+        def is_reached_sub_tab():
+            return self.match_grid.get_current_sub_tab_name() == sub_tab_name
 
-        self.go(match.url, until=self.matchGrid.isLoadedGrid,
-                empty=self.matchGrid.isEmpty, reload=self.matchGrid.isReload)
+        self.go(match.url, until=self.match_grid.is_loaded_grid,
+                empty=self.match_grid.is_empty, reload=self.match_grid.is_reload)
 
-        match.updatedAt = datetime.datetime.today()
-        match.dateTime = self.matchGrid.getDateTime()
-        match.scoreString = self.matchGrid.getResult()
+        match.updated_at = datetime.datetime.today()
+        match.date_time = self.match_grid.get_date_time()
+        match.score_string = self.match_grid.get_result()
         match.score = None
 
-        if match.scoreString:
-            match.setFinished()
-            match.filledScore = True
+        if match.score_string:
+            match.set_finished()
+            match.filled_score = True
 
-        if fillFinished and not match.finished:
+        if fill_finished and not match.finished:
             return
 
-        if match.filledOdds:
+        if match.filled_odds:
             return
 
-        for tabName in oddsTabs.keys():
-            match.odds[tabName] = {subTabName: None for subTabName in oddsTabs[tabName]}
+        for tab_name in odds_tabs.keys():
+            match.odds[tab_name] = {sub_tab_name: None for sub_tab_name in odds_tabs[tab_name]}
 
-        if self.matchGrid.isEmpty():
-            match.filledOdds = True
+        if self.match_grid.is_empty():
+            match.filled_odds = True
             return
 
-        tabs = self.matchGrid.getTabs()
-        for tabName in getTabsNameList():
-            if not isReachedTab():
-                self.browser.click(tabs[tabName],
-                                   until=[self.matchGrid.isLoadedGrid, isReachedTab],
-                                   reload=self.matchGrid.isReload)
+        tabs = self.match_grid.get_tabs()
+        for tab_name in get_tabs_name_list():
+            if not is_reached_tab():
+                self.browser.click(tabs[tab_name],
+                                   until=[self.match_grid.is_loaded_grid, is_reached_tab],
+                                   reload=self.match_grid.is_reload)
 
-            subTabs = self.matchGrid.getSubTabs()
-            for subTabName in getSubTabsNameList():
-                if not isReachedSubTab():
-                    self.browser.click(subTabs[subTabName],
-                                       until=[self.matchGrid.isLoadedGrid, isReachedSubTab],
-                                       reload=self.matchGrid.isReload)
+            subTabs = self.match_grid.get_sub_tabs()
+            for sub_tab_name in get_sub_tabs_name_list():
+                if not is_reached_sub_tab():
+                    self.browser.click(subTabs[sub_tab_name],
+                                       until=[self.match_grid.is_loaded_grid, is_reached_sub_tab],
+                                       reload=self.match_grid.is_reload)
 
-                match.odds[tabName][subTabName] = self.matchGrid.grab(tabName)
+                match.odds[tab_name][sub_tab_name] = self.match_grid.grab(tab_name)
 
-        match.filledOdds = True
+        match.filled_odds = True
 
-    def testMatch(self, sport: str, url: str):
-        oddsTabs = names.sportTabs[sport]
+    def test_match(self, sport: str, url: str):
+        odds_tabs = names.sport_tabs[sport]
 
-        def getTabsNameList():
-            current = self.matchGrid.getCurrentTabName()
-            tabsNameList = list(oddsTabs.keys())
-            if current in tabsNameList:
-                return [current] + [i for i in tabsNameList if (i != current and i in tabs)]
+        def get_tabs_name_list():
+            current = self.match_grid.get_current_tab_name()
+            tabs_name_list = list(odds_tabs.keys())
+            if current in tabs_name_list:
+                return [current] + [i for i in tabs_name_list if (i != current and i in tabs)]
             else:
-                return [i for i in tabsNameList if i in tabs]
+                return [i for i in tabs_name_list if i in tabs]
 
-        def getSubTabsNameList():
-            current = self.matchGrid.getCurrentSubTabName()
-            subTabsNameList = oddsTabs[tabName]
-            if current in subTabsNameList:
-                return [current] + [i for i in subTabsNameList if (i != current and i in subTabs)]
+        def get_sub_tabs_name_list():
+            current = self.match_grid.get_current_sub_tab_name()
+            sub_tabs_name_list = odds_tabs[tab_name]
+            if current in sub_tabs_name_list:
+                return [current] + [i for i in sub_tabs_name_list if (i != current and i in subTabs)]
             else:
-                return [i for i in subTabsNameList if i in subTabs]
+                return [i for i in sub_tabs_name_list if i in subTabs]
 
-        def isReachedTab():
-            return self.matchGrid.getCurrentTabName() == tabName
+        def is_reached_tab():
+            return self.match_grid.get_current_tab_name() == tab_name
 
-        def isReachedSubTab():
-            return self.matchGrid.getCurrentSubTabName() == subTabName
+        def is_reached_sub_tab():
+            return self.match_grid.get_current_sub_tab_name() == sub_tab_name
 
-        print(f'isReachedUrl: {utils.isReachedUrl(url)(self.browser.driver)}')
+        print(f'isReachedUrl: {utils.is_reached_url(url)(self.browser.driver)}')
         print(f'target: {url}, current: {self.browser.current_url}')
 
-        print(f'isLoadedGrid: {self.matchGrid.isLoadedGrid()}')
-        print(f'isEmpty: {self.matchGrid.isEmpty()}')
-        print(f'isReload: {self.matchGrid.isReload()}')
+        print(f'isLoadedGrid: {self.match_grid.is_loaded_grid()}')
+        print(f'isEmpty: {self.match_grid.is_empty()}')
+        print(f'isReload: {self.match_grid.is_reload()}')
 
         odds = {}
-        for tabName in oddsTabs.keys():
-            odds[tabName] = {subTabName: None for subTabName in oddsTabs[tabName]}
+        for tab_name in odds_tabs.keys():
+            odds[tab_name] = {sub_tab_name: None for sub_tab_name in odds_tabs[tab_name]}
 
-        tabs = self.matchGrid.getTabs()
+        tabs = self.match_grid.get_tabs()
         print(f'tabs: {tabs.keys()}')
-        for tabName in getTabsNameList():
-            print(f'> tab: {tabName}')
-            if not isReachedTab():
-                print(f'click on {tabName}')
-                self.browser.click(tabs[tabName],
-                                   until=[self.matchGrid.isLoadedGrid, isReachedTab],
-                                   reload=self.matchGrid.isReload)
-                print(f'res: [{self.matchGrid.isLoadedGrid()}, {isReachedTab()}], [{self.matchGrid.isReload()}')
+        for tab_name in get_tabs_name_list():
+            print(f'> tab: {tab_name}')
+            if not is_reached_tab():
+                print(f'click on {tab_name}')
+                self.browser.click(tabs[tab_name],
+                                   until=[self.match_grid.is_loaded_grid, is_reached_tab],
+                                   reload=self.match_grid.is_reload)
+                print(f'res: [{self.match_grid.is_loaded_grid()}, {is_reached_tab()}], [{self.match_grid.is_reload()}')
 
-            subTabs = self.matchGrid.getSubTabs()
+            subTabs = self.match_grid.get_sub_tabs()
             print(f'subTabs: {subTabs}')
-            for subTabName in getSubTabsNameList():
-                print(f'> subTab: {subTabName}')
-                if not isReachedSubTab():
-                    print(f'click on {subTabName}')
-                    self.browser.click(subTabs[subTabName],
-                                       until=[self.matchGrid.isLoadedGrid, isReachedSubTab],
-                                       reload=self.matchGrid.isReload)
-                    print(f'res: [{self.matchGrid.isLoadedGrid()}, {isReachedSubTab()}], [{self.matchGrid.isReload()}')
+            for sub_tab_name in get_sub_tabs_name_list():
+                print(f'> subTab: {sub_tab_name}')
+                if not is_reached_sub_tab():
+                    print(f'click on {sub_tab_name}')
+                    self.browser.click(subTabs[sub_tab_name],
+                                       until=[self.match_grid.is_loaded_grid, is_reached_sub_tab],
+                                       reload=self.match_grid.is_reload)
+                    print(f'res: [{self.match_grid.is_loaded_grid()}, '
+                          f'{is_reached_sub_tab()}], [{self.match_grid.is_reload()}')
 
-                print(self.matchGrid.grab(tabName))
+                print(self.match_grid.grab(tab_name))

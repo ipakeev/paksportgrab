@@ -14,14 +14,14 @@ class Grid(object):
         else:
             return ''
 
-    def isInternetError(self):
-        if self.browser.is_on_page(message.internetError):
-            msg = self.browser.find_element(message.internetError).text
+    def is_internet_error(self):
+        if self.browser.is_on_page(message.internet_error):
+            msg = self.browser.find_element(message.internet_error).text
             if msg == 'Нет подключения к Интернету':
                 return True
         return False
 
-    def isEmpty(self) -> bool:
+    def is_empty(self) -> bool:
         msg = self.msg
         if msg:
             if msg == 'No data available':
@@ -37,7 +37,7 @@ class Grid(object):
 
         return False
 
-    def isReload(self) -> bool:
-        if 'try again' in self.msg or self.isInternetError():
+    def is_reload(self) -> bool:
+        if 'try again' in self.msg or self.is_internet_error():
             return True
         return False

@@ -3,13 +3,13 @@ from typing import Tuple, List, Dict
 from pakselenium import Browser, PageElement
 
 from .config import GLOBAL
-from .config.selector import leaguePage
+from .config.selector import league_page
 from .grid import Grid
 from .units.border import LeagueGridBorder
 from .units.match import Match
 
 
-def catchExceptions(func):
+def catch_exceptions(func):
     def wrapper(self, *args, **kwargs):
         if GLOBAL.debug:
             return func(self, *args, **kwargs)
@@ -18,10 +18,10 @@ def catchExceptions(func):
             try:
                 return func(self, *args, **kwargs)
             except ValueError:
-                self.browser.refresh(until=self.isLoadedGrid)
+                self.browser.refresh(until=self.is_loaded_grid)
             except Exception as e:
-                if self.isReload():
-                    self.browser.refresh(until=self.isLoadedGrid)
+                if self.is_reload():
+                    self.browser.refresh(until=self.is_loaded_grid)
                     continue
                 print('msg: {}'.format(self.msg))
                 raise e
@@ -36,46 +36,46 @@ class LeagueGrid(Grid):
         super().__init__()
         self.browser = browser
 
-    def getSCL(self) -> Tuple[str, str, str]:
+    def get_SCL(self) -> Tuple[str, str, str]:
         # ['/', sport, country, league]
-        pes = self.browser.find_elements(leaguePage.SCL)
+        pes = self.browser.find_elements(league_page.SCL)
         _, sport, country, league = [i.text for i in pes]
-        league = league.replace(self.getCurrentSeasonName(), '').strip()
+        league = league.replace(self.get_current_season_name(), '').strip()
         return sport, country, league
 
-    def getNavigationButtons(self) -> Dict[str, PageElement]:
-        pes = self.browser.find_elements(leaguePage.navigation.buttons)
+    def get_navigation_buttons(self) -> Dict[str, PageElement]:
+        pes = self.browser.find_elements(league_page.navigation.buttons)
         buttons = {i.text: i for i in pes}
         return buttons
 
-    def getCurrentSeasonName(self) -> str:
+    def get_current_season_name(self) -> str:
         # ['RESULTS', current season]
-        pes = self.browser.find_elements(leaguePage.navigation.currentSeason)
+        pes = self.browser.find_elements(league_page.navigation.current_season)
         tab, season = [i.text for i in pes]
         assert tab == 'RESULTS'
         return season
 
-    def getSeasonTabs(self) -> List[PageElement]:
+    def get_season_tabs(self) -> List[PageElement]:
         # ['NEXT MATCHES', 'RESULTS', 'STANDINGS', 'OUTRIGHTS', list of seasons]
-        pes = self.browser.find_elements(leaguePage.navigation.seasons)
-        seasons = [i for i in pes if i.text not in leaguePage.ignoreTabs]
+        pes = self.browser.find_elements(league_page.navigation.seasons)
+        seasons = [i for i in pes if i.text not in league_page.ignore_tabs]
 
         # sort seasons, first current season
-        current = self.getCurrentSeasonName()
+        current = self.get_current_season_name()
         index = [n for n, i in enumerate(seasons) if i.text == current][0]
         current = seasons.pop(index)
 
         return [current] + seasons
 
-    @catchExceptions
+    @catch_exceptions
     def grab(self) -> List[Match]:
         border = LeagueGridBorder()
         matches = []
-        for row in self.browser.find_elements(leaguePage.grid):
+        for row in self.browser.find_elements(league_page.grid):
             cl = row.get_attribute('class')
             if 'deactivate' in cl:  # матч
                 m = Match().parse(self.browser, border, row)
-                if m.bkNum is None:
+                if m.bk_num is None:
                     print('>!> invalid bk odds: {}'.format(self.browser.current_url))
                     raise ValueError
                 if m.finished:
@@ -93,31 +93,31 @@ class LeagueGrid(Grid):
                 raise StopIteration(cl)
         return matches
 
-    def nextPage(self):
-        def isGotNext():
-            if self.browser.is_on_page(leaguePage.navigation.buttons):
-                return current in self.getNavigationButtons()
+    def next_page(self):
+        def is_got_next():
+            if self.browser.is_on_page(league_page.navigation.buttons):
+                return current in self.get_navigation_buttons()
 
-        current = self.browser.find_element(leaguePage.navigation.currentPage).text
-        btn = self.getNavigationButtons()[leaguePage.navigation.nextButton]
+        current = self.browser.find_element(league_page.navigation.current_page).text
+        btn = self.get_navigation_buttons()[league_page.navigation.next_button]
         url = btn.get_attribute('href')
-        self.browser.go(url, until=[self.isLoadedGrid, isGotNext], empty=self.isEmpty, reload=self.isReload)
+        self.browser.go(url, until=[self.is_loaded_grid, is_got_next], empty=self.is_empty, reload=self.is_reload)
 
-    def isEndOfSeason(self) -> bool:
-        if not self.isVisibleNavigationButtons():
+    def is_end_of_season(self) -> bool:
+        if not self.is_visible_navigation_buttons():
             return True
 
-        buttons = self.getNavigationButtons()
+        buttons = self.get_navigation_buttons()
         urls = {key: pe.get_attribute('href') for key, pe in buttons.items()}
-        if urls[leaguePage.navigation.nextButton] == urls[leaguePage.navigation.endButton]:
-            if list(urls.values()).count(urls[leaguePage.navigation.endButton]) == 2:
+        if urls[league_page.navigation.next_button] == urls[league_page.navigation.end_button]:
+            if list(urls.values()).count(urls[league_page.navigation.end_button]) == 2:
                 return True
 
-    def isLoadedGrid(self) -> bool:
-        return self.browser.is_on_page(leaguePage.gridElement)
+    def is_loaded_grid(self) -> bool:
+        return self.browser.is_on_page(league_page.grid_element)
 
-    def isVisibleNavigationButtons(self) -> bool:
-        return self.browser.is_on_page(leaguePage.navigation.buttons)
+    def is_visible_navigation_buttons(self) -> bool:
+        return self.browser.is_on_page(league_page.navigation.buttons)
 
-    def isVisibleSeasonTabs(self) -> bool:
-        return self.browser.is_on_page(leaguePage.navigation.seasons)
+    def is_visible_season_tabs(self) -> bool:
+        return self.browser.is_on_page(league_page.navigation.seasons)

@@ -12,8 +12,8 @@ class Sport(object):
         self.leagues = []
 
     @staticmethod
-    def isEqual(border: SportGridBorder, league: League):
-        if border.leagueUrl and (border.leagueUrl == league.leagueUrl):
+    def is_equal(border: SportGridBorder, league: League):
+        if border.league_url and (border.league_url == league.league_url):
             return True
         if border.sport and (border.sport == league.sport):
             if border.country and (border.country == league.country):
@@ -21,15 +21,15 @@ class Sport(object):
                     return True
         return False
 
-    def getLeague(self, border: SportGridBorder) -> League:
+    def get_league(self, border: SportGridBorder) -> League:
         for league in self.leagues:
-            if self.isEqual(border, league):
+            if self.is_equal(border, league):
                 return league
 
         league = League().parse(border)
         self.leagues.append(league)
         return league
 
-    def addMatch(self, border: SportGridBorder, m: Match):
-        league = self.getLeague(border)
-        league.addNextMatch(m)
+    def add_match(self, border: SportGridBorder, m: Match):
+        league = self.get_league(border)
+        league.add_next_match(m)

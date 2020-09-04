@@ -36,13 +36,13 @@ class tab:
     EH = 'EH'
     HTFT = 'HTFT'
     CS = 'CS'
-    MoreBets = 'More'
+    more_bets = 'More'
     BTS = 'BTS'
     OE = 'OE'
     TQ = 'TQ'
 
 
-class subTab:
+class sub_tab:
     ft = 'ft'
     ftot = 'ftot'
     ot = 'ot'
@@ -71,7 +71,7 @@ class tip:
     under = 'under'
 
 
-sportName = {
+sport_name = {
     'Soccer': sport.soccer,
     'Tennis': sport.tennis,
     'Basketball': sport.basketball,
@@ -99,7 +99,7 @@ sportName = {
     'MMA': sport.mma,
 }
 
-tabName = {
+tab_name = {
     '1X2': tab.WDL,
     'Home/Away': tab.WL,
     'O/U': tab.total,
@@ -116,7 +116,7 @@ tabName = {
     'Half Time / Full Time': tab.HTFT,
     'CS': tab.CS,
     'Correct Score': tab.CS,
-    'More bets': tab.MoreBets,
+    'More bets': tab.more_bets,
     'BTS': tab.BTS,
     'Both Teams to Score': tab.BTS,
     'O/E': tab.OE,
@@ -125,60 +125,60 @@ tabName = {
     'To Qualify': tab.TQ,
 }
 
-subTabName = {
-    'Full Time': subTab.ft,
-    'FT including OT': subTab.ftot,
-    '1st Half': subTab.h1,
-    '1st Half Innings': subTab.h1,
-    '1st Period': subTab.h1,
-    '2nd Half': subTab.h2,
-    '2nd Half Innings': subTab.h2,
-    '2nd Period': subTab.h2,
-    '3rd Period': subTab.h3,
-    '1Q': subTab.q1,
-    '1st Inning': subTab.q1,
-    '2Q': subTab.q2,
-    '3Q': subTab.q3,
-    '4Q': subTab.q4,
+sub_tab_name = {
+    'Full Time': sub_tab.ft,
+    'FT including OT': sub_tab.ftot,
+    '1st Half': sub_tab.h1,
+    '1st Half Innings': sub_tab.h1,
+    '1st Period': sub_tab.h1,
+    '2nd Half': sub_tab.h2,
+    '2nd Half Innings': sub_tab.h2,
+    '2nd Period': sub_tab.h2,
+    '3rd Period': sub_tab.h3,
+    '1Q': sub_tab.q1,
+    '1st Inning': sub_tab.q1,
+    '2Q': sub_tab.q2,
+    '3Q': sub_tab.q3,
+    '4Q': sub_tab.q4,
 }
 
-sportTabs = {
+sport_tabs = {
     sport.soccer: {
-        tab.WDL: [subTab.ft, subTab.h1],
-        tab.handicap: [subTab.ft],
-        tab.total: [subTab.ft, subTab.h1],
+        tab.WDL: [sub_tab.ft, sub_tab.h1],
+        tab.handicap: [sub_tab.ft],
+        tab.total: [sub_tab.ft, sub_tab.h1],
     },
     sport.hockey: {
-        tab.WDL: [subTab.ft, subTab.h1],
-        tab.WL: [subTab.ftot],
-        tab.handicap: [subTab.ftot, subTab.ft],
-        tab.total: [subTab.ftot, subTab.ft, subTab.h1],
+        tab.WDL: [sub_tab.ft, sub_tab.h1],
+        tab.WL: [sub_tab.ftot],
+        tab.handicap: [sub_tab.ftot, sub_tab.ft],
+        tab.total: [sub_tab.ftot, sub_tab.ft, sub_tab.h1],
     },
     sport.basketball: {
-        tab.WL: [subTab.ftot],
-        tab.handicap: [subTab.ftot],
-        tab.total: [subTab.ftot, subTab.ft, subTab.h1, subTab.q1],
+        tab.WL: [sub_tab.ftot],
+        tab.handicap: [sub_tab.ftot],
+        tab.total: [sub_tab.ftot, sub_tab.ft, sub_tab.h1, sub_tab.q1],
     },
     sport.baseball: {
-        tab.WL: [subTab.ftot],
-        tab.handicap: [subTab.ftot],
-        tab.total: [subTab.ftot, subTab.h1, subTab.q1],
+        tab.WL: [sub_tab.ftot],
+        tab.handicap: [sub_tab.ftot],
+        tab.total: [sub_tab.ftot, sub_tab.h1, sub_tab.q1],
     },
 }
 
-matchTableGrid = 'tableGrid'
-matchValueGrid = 'valueGrid'
+match_table_grid = 'tableGrid'
+match_value_grid = 'valueGrid'
 
 tableOrValueGrid = {
-    tab.WDL: matchTableGrid,
-    tab.WL: matchTableGrid,
-    tab.handicap: matchValueGrid,
-    tab.total: matchValueGrid,
+    tab.WDL: match_table_grid,
+    tab.WL: match_table_grid,
+    tab.handicap: match_value_grid,
+    tab.total: match_value_grid,
 }
 
-baseUrl = 'https://www.oddsportal.com/'
-cancelledTypes = ['award.', 'canc.', 'postp.', 'abn.', 'w.o.', 'int.', 'TF']
-cookiePath = './cookies/'
+base_url = 'https://www.oddsportal.com/'
+cancelled_types = ['award.', 'canc.', 'postp.', 'abn.', 'w.o.', 'int.', 'TF']
+cookie_path = './cookies/'
 
 train = 'train'
 test = 'test'

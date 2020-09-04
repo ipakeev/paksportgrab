@@ -15,80 +15,80 @@ class Match:
     sport: str
     country: str
     league: str
-    leagueId: int
+    league_id: int
     season: str
     teams: list
-    scoreString: Optional[str]
+    score_string: Optional[str]
     score: Optional[dict]
     date: datetime.date
     time: Union[datetime.time, str]
-    _dateTime: datetime.datetime
+    _date_time: datetime.datetime
     odds: Dict[str, Dict[str, dict]]
-    bkNum: Optional[int]
-    notStarted: bool
+    bk_num: Optional[int]
+    not_started: bool
     live: bool
     finished: bool
     canceled: bool
-    filledOdds: bool
-    filledScore: bool
+    filled_odds: bool
+    filled_score: bool
 
-    createdAt = datetime.datetime
-    updatedAt: datetime.datetime
-    madeNextAt: datetime.datetime
-    madeReadyAt: datetime.datetime
+    created_at = datetime.datetime
+    updated_at: datetime.datetime
+    made_next_at: datetime.datetime
+    made_ready_at: datetime.datetime
 
     data: dict
-    wdlName: str
-    scoreName: str
-    totBk: float
-    hpBk: float
+    wdl_name: str
+    score_name: str
+    tot_bk: float
+    hp_bk: float
 
     @property
-    def dateTime(self):
-        return self._dateTime
+    def date_time(self):
+        return self._date_time
 
-    @dateTime.setter
-    def dateTime(self, dt: datetime.datetime):
-        self._dateTime = dt
+    @date_time.setter
+    def date_time(self, dt: datetime.datetime):
+        self._date_time = dt
         self.date = dt.date()
         self.time = dt.time()
 
-    def setNotStarted(self):
-        self.notStarted = True
+    def set_not_started(self):
+        self.not_started = True
         self.live = False
         self.finished = False
         self.canceled = False
 
-    def setLive(self):
-        self.notStarted = False
+    def set_live(self):
+        self.not_started = False
         self.live = True
         self.finished = False
         self.canceled = False
 
-    def setFinished(self):
-        self.notStarted = False
+    def set_finished(self):
+        self.not_started = False
         self.live = False
         self.finished = True
         self.canceled = False
 
-    def setCanceled(self):
-        self.notStarted = False
+    def set_canceled(self):
+        self.not_started = False
         self.live = False
         self.finished = False
         self.canceled = True
 
-    def toDict(self):
+    def to_dict(self):
         return self.__dict__
 
     def load(self, attrs: dict):
         self.__dict__.update(attrs)
         return self
 
-    def getOdds(self, tab: str, value: Union[str, float] = None) -> Optional[List[float]]:
+    def get_odds(self, tab: str, value: Union[str, float] = None) -> Optional[List[float]]:
         if tab not in self.odds:
             return None
 
-        loc = self.odds[tab][self.scoreName]
+        loc = self.odds[tab][self.score_name]
         if not loc:
             return None
 
@@ -100,7 +100,7 @@ class Match:
 
         elif tab == names.tab.total:
             if value is None or value == 'bk':
-                value = self.totBk
+                value = self.tot_bk
             if value not in loc:
                 return None
             loc = loc[value]
@@ -108,7 +108,7 @@ class Match:
 
         elif tab == names.tab.handicap:
             if value is None or value == 'bk':
-                value = self.hpBk
+                value = self.hp_bk
             if value not in loc:
                 return None
             loc = loc[value]
@@ -127,7 +127,7 @@ class Match:
         time = browser.find_element_from(pe, Selector(By.CSS_SELECTOR, 'td.table-time'))
         try:
             self.time = datetime.time.fromisoformat(time.text)
-            self.dateTime = datetime.datetime.combine(self.date, self.time)
+            self.date_time = datetime.datetime.combine(self.date, self.time)
         except ValueError:
             self.time = time.text
 
@@ -141,23 +141,23 @@ class Match:
             url = [i for i in url if (i.startswith('https://') and 'inplay-odds' not in i)]
             assert len(url) == 1
             self.url = url[0]
-        self.id = utils.getMatchId(self.url)
+        self.id = utils.get_match_id(self.url)
 
         scoreString = browser.find_elements_from(pe, Selector(By.CSS_SELECTOR, 'td.table-score'))
         if scoreString:
             assert len(scoreString) == 1
             scoreString = scoreString[0]
-            self.scoreString = scoreString.text
-            if self.scoreString in names.cancelledTypes:
-                self.setCanceled()
+            self.score_string = scoreString.text
+            if self.score_string in names.cancelled_types:
+                self.set_canceled()
             elif 'live-score' in scoreString.get_attribute('class') or 'live-score' in time.get_attribute('class'):
-                self.setLive()
+                self.set_live()
             else:
-                self.setFinished()
-                assert self.dateTime
+                self.set_finished()
+                assert self.date_time
         else:
-            self.scoreString = None
-            self.setNotStarted()
+            self.score_string = None
+            self.set_not_started()
         self.score = None
 
         # odds = browser.findElementsFrom(pe, 'td.odds-nowrp')
@@ -172,11 +172,11 @@ class Match:
 
         bkNum = browser.find_element_from(pe, Selector(By.CSS_SELECTOR, 'td.info-value'))
         try:
-            self.bkNum = int(bkNum.text)
+            self.bk_num = int(bkNum.text)
         except ValueError:
-            self.bkNum = None
+            self.bk_num = None
 
-        self.filledOdds = False
-        self.filledScore = False
+        self.filled_odds = False
+        self.filled_score = False
 
         return self

@@ -1,8 +1,8 @@
-from paklib import ioutils
+from paklib import io
 from pakselenium import Browser
 
 from .config import names
-from .config.selector import userPage
+from .config.selector import user_page
 
 
 class User(object):
@@ -13,49 +13,49 @@ class User(object):
     def __init__(self, browser: Browser):
         self.browser = browser
 
-    def setLoginData(self, username: str, password: str):
+    def set_login_data(self, username: str, password: str):
         self.username = username
         self.password = password
 
-    def isLoggedIn(self):
-        def untilBtn():
-            return self.browser.is_on_page(userPage.loginBtn) or self.browser.is_on_page(userPage.logoutBtn)
+    def is_logged_in(self):
+        def until_btn():
+            return self.browser.is_on_page(user_page.login_btn) or self.browser.is_on_page(user_page.logout_btn)
 
-        if names.baseUrl not in self.browser.current_url:
-            self.browser.go(names.baseUrl, until=untilBtn)
+        if names.base_url not in self.browser.current_url:
+            self.browser.go(names.base_url, until=until_btn)
 
-        if self.browser.is_on_page(userPage.logoutBtn):
+        if self.browser.is_on_page(user_page.logout_btn):
             return True
         return False
 
     def login(self):
-        def untilBtn():
-            return self.browser.is_on_page(userPage.loginBtn) or self.browser.is_on_page(userPage.logoutBtn)
+        def until_btn():
+            return self.browser.is_on_page(user_page.login_btn) or self.browser.is_on_page(user_page.logout_btn)
 
-        cookiePath = ioutils.correctFileName([names.cookiePath, 'oddsportal_cookies.pkl'])
-        if self.isLoggedIn():
+        cookiePath = io.correct_file_name([names.cookie_path, 'oddsportal_cookies.pkl'])
+        if self.is_logged_in():
             return
 
-        cookies = ioutils.loadPickle(cookiePath)
+        cookies = io.load_pickle(cookiePath)
         if cookies:
             self.browser.set_cookies(cookies)
-            self.browser.refresh(until=untilBtn)
-            if self.isLoggedIn():
+            self.browser.refresh(until=until_btn)
+            if self.is_logged_in():
                 return
 
-        self.browser.click(userPage.loginBtn, element_text='Login', until=userPage.usernameForm)
-        self.browser.fill_text(userPage.usernameForm, self.username)
-        self.browser.fill_text(userPage.passwordForm, self.password)
-        self.browser.click(userPage.loginFormBtn, element_text='Login', until=userPage.logoutBtn, sleep=1.0)
+        self.browser.click(user_page.login_btn, element_text='Login', until=user_page.username_form)
+        self.browser.fill_text(user_page.username_form, self.username)
+        self.browser.fill_text(user_page.password_form, self.password)
+        self.browser.click(user_page.login_form_btn, element_text='Login', until=user_page.logout_btn, sleep=1.0)
 
-        assert self.isLoggedIn()
+        assert self.is_logged_in()
 
         cookies = self.browser.get_cookies()
-        ioutils.savePickle(cookiePath, cookies)
+        io.save_pickle(cookiePath, cookies)
 
     def logout(self):
-        self.browser.go(names.baseUrl)
-        if not self.isLoggedIn():
+        self.browser.go(names.base_url)
+        if not self.is_logged_in():
             return
-        self.browser.click(userPage.logoutBtn, element_text='Logout')
-        assert not self.isLoggedIn()
+        self.browser.click(user_page.logout_btn, element_text='Logout')
+        assert not self.is_logged_in()

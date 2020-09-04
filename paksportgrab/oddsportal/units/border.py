@@ -2,16 +2,16 @@ import datetime
 
 from pakselenium import Browser, PageElement, Selector, By
 
-from .. import utils
+from paksportgrab.oddsportal import utils
 
 
 class Border(object):
     sport: str
     country: str
     league: str
-    leagueUrl: str
+    league_url: str
     date: datetime.date
-    oddsType: list
+    odds_type: list
 
     def update(self, browser: Browser, pe: PageElement):
         raise StopIteration
@@ -26,11 +26,11 @@ class SportGridBorder(Border):
         country, league = pes
         self.country = country.text
         self.league = league.text
-        self.leagueUrl = league.get_attribute('href') + 'results/'
+        self.league_url = league.get_attribute('href') + 'results/'
 
         # [cl, *odds, bkNum]
         pes = browser.find_elements_from(pe, Selector(By.CSS_SELECTOR, 'th'))
-        self.oddsType = [i.text for i in pes[1:-1]]
+        self.odds_type = [i.text for i in pes[1:-1]]
 
 
 class LeagueGridBorder(Border):
@@ -38,11 +38,11 @@ class LeagueGridBorder(Border):
     def update(self, browser: Browser, pe: PageElement):
         pes = browser.find_elements_from(pe, Selector(By.CSS_SELECTOR, 'th'))
         date, *odds, bk = [i.text for i in pes]
-        self.date = self.getCorrectDate(date)
-        self.oddsType = odds
+        self.date = self.get_correct_date(date)
+        self.odds_type = odds
 
     @staticmethod
-    def getCorrectDate(date: str) -> datetime.date:
+    def get_correct_date(date: str) -> datetime.date:
         # date = '19 Sep 2019'
         if 'Tomorrow' in date:
             today = datetime.date.today()
@@ -52,4 +52,4 @@ class LeagueGridBorder(Border):
         if 'Yesterday' in date:
             today = datetime.date.today()
             return today - datetime.timedelta(days=1)
-        return utils.getDateFromString(date)
+        return utils.get_date_from_string(date)
