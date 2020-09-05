@@ -32,7 +32,7 @@ class Match:
     filled_odds: bool
     filled_score: bool
 
-    created_at = datetime.datetime
+    created_at: datetime.datetime
     updated_at: datetime.datetime
     made_next_at: datetime.datetime
     made_ready_at: datetime.datetime
@@ -160,11 +160,11 @@ class Match:
             self.set_not_started()
         self.score = None
 
-        # odds = browser.findElementsFrom(pe, 'td.odds-nowrp')
+        # odds = browser.find_elements_from(pe, 'td.odds-nowrp')
         # odds = [i.text for i in odds]
         # odds = [float(i) if i != '-' else None for i in odds]
-        # assert len(odds) == len(border.oddsType)
-        # odds = {t: odd for t, odd in zip(border.oddsType, odds)}
+        # assert len(odds) == len(border.odds_type)
+        # odds = {t: odd for t, odd in zip(border.odds_type, odds)}
         # self.odds = {
         #     names.WDL: odds,
         # }
