@@ -1,7 +1,7 @@
 import datetime
 from typing import List
 
-from pakselenium import Browser
+from pakselenium import Browser, catch
 
 from . import utils
 from .config import GLOBAL
@@ -52,15 +52,25 @@ class SportGrid(Grid):
         return utils.get_sport_name(pe.text)
 
     def switch_to_events(self):
-        if self.is_switched_to_events():
-            return
-        self.browser.click(sport_page.events_tab, until=[self.is_loaded_grid, self.is_switched_to_events])
+
+        @catch.timeoutException(lambda: self.browser.refresh())
+        def switch():
+            if self.is_switched_to_events():
+                return
+            self.browser.click(sport_page.events_tab, until=[self.is_loaded_grid, self.is_switched_to_events])
+
+        switch()
 
     def switch_to_kick_off_time(self):
-        if self.is_switched_to_kick_off_time():
-            return
-        self.browser.click(sport_page.kick_off_time_tab, until=[self.is_loaded_grid,
-                                                                self.is_switched_to_kick_off_time])
+
+        @catch.timeoutException(lambda: self.browser.refresh())
+        def switch():
+            if self.is_switched_to_kick_off_time():
+                return
+            self.browser.click(sport_page.kick_off_time_tab,
+                               until=[self.is_loaded_grid, self.is_switched_to_kick_off_time])
+
+        switch()
 
     @catch_exceptions
     def grab(self) -> List[League]:

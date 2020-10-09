@@ -1,6 +1,6 @@
 from typing import Tuple, List, Dict
 
-from pakselenium import Browser, PageElement
+from pakselenium import Browser, PageElement, catch
 
 from .config import GLOBAL
 from .config.selector import league_page
@@ -101,7 +101,12 @@ class LeagueGrid(Grid):
         current = self.browser.find_element(league_page.navigation.current_page).text
         btn = self.get_navigation_buttons()[league_page.navigation.next_button]
         url = btn.get_attribute('href')
-        self.browser.go(url, until=[self.is_loaded_grid, is_got_next], empty=self.is_empty, reload=self.is_reload)
+
+        @catch.timeoutException(lambda: self.browser.refresh())
+        def go():
+            self.browser.go(url, until=[self.is_loaded_grid, is_got_next], empty=self.is_empty, reload=self.is_reload)
+
+        go()
 
     def is_end_of_season(self) -> bool:
         if not self.is_visible_navigation_buttons():

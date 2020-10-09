@@ -16,7 +16,8 @@ def get_match_tab_name(name: str) -> Optional[str]:
         return
     if name in names.tab_name:
         return names.tab_name[name]
-    raise KeyError(f'>!> Unknown tab: {name}')
+    print(f'>!> Unknown tab: {name}')
+    return
 
 
 def get_match_sub_tab_name(name: str) -> Optional[str]:
@@ -24,7 +25,8 @@ def get_match_sub_tab_name(name: str) -> Optional[str]:
         return
     if name in names.sub_tab_name:
         return names.sub_tab_name[name]
-    raise KeyError(f'>!> Unknown tab: {name}')
+    print(f'>!> Unknown tab: {name}')
+    return
 
 
 def get_match_id(url: str) -> str:

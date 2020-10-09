@@ -143,14 +143,14 @@ class Match:
             self.url = url[0]
         self.id = utils.get_match_id(self.url)
 
-        scoreString = browser.find_elements_from(pe, Selector(By.CSS_SELECTOR, 'td.table-score'))
-        if scoreString:
-            assert len(scoreString) == 1
-            scoreString = scoreString[0]
-            self.score_string = scoreString.text
+        score_string = browser.find_elements_from(pe, Selector(By.CSS_SELECTOR, 'td.table-score'))
+        if score_string:
+            assert len(score_string) == 1
+            score_string = score_string[0]
+            self.score_string = score_string.text
             if self.score_string in names.cancelled_types:
                 self.set_canceled()
-            elif 'live-score' in scoreString.get_attribute('class') or 'live-score' in time.get_attribute('class'):
+            elif 'live-score' in score_string.get_attribute('class') or 'live-score' in time.get_attribute('class'):
                 self.set_live()
             else:
                 self.set_finished()
@@ -170,9 +170,9 @@ class Match:
         # }
         self.odds = {}
 
-        bkNum = browser.find_element_from(pe, Selector(By.CSS_SELECTOR, 'td.info-value'))
+        bk_num = browser.find_element_from(pe, Selector(By.CSS_SELECTOR, 'td.info-value'))
         try:
-            self.bk_num = int(bkNum.text)
+            self.bk_num = int(bk_num.text)
         except ValueError:
             self.bk_num = None
 
