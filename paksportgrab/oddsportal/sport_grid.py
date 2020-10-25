@@ -85,6 +85,8 @@ class SportGrid(Grid):
                 sport.add_match(border, m)
             elif cl == 'center nob-border':  # иногда выскакивает, если матчи будут скоро
                 continue
+            elif cl == 'table-dummyrow':  # пустая неотображаемая строка
+                continue
             elif 'dark center' in cl:  # страна, лига
                 border.update(self.browser, row)
             else:
