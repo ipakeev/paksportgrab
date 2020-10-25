@@ -25,7 +25,7 @@ def get_match_sub_tab_name(name: str) -> Optional[str]:
         return
     if name in names.sub_tab_name:
         return names.sub_tab_name[name]
-    print(f'>!> Unknown tab: {name}')
+    print(f'>!> Unknown sub tab: {name}')
     return
 
 
