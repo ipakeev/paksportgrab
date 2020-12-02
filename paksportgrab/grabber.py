@@ -4,8 +4,8 @@ import time
 from functools import partial
 from typing import Optional, Union, List, Callable
 
-from pakselenium import Browser, Selector, catch
-from selenium.common.exceptions import WebDriverException, StaleElementReferenceException
+from pakselenium import Browser, Selector
+from selenium.common.exceptions import WebDriverException, StaleElementReferenceException, TimeoutException
 
 from .oddsportal import utils
 from .oddsportal.config import names, GLOBAL
@@ -29,6 +29,9 @@ def catch_exceptions(func):
             except StaleElementReferenceException:
                 # when click was wrong
                 pass
+            except TimeoutException:
+                # when error loading page
+                self.browser.refresh()
             except AssertionError:
                 # when unknown error (tab name)
                 print('>!> Assertion error')
@@ -79,13 +82,8 @@ class Grabber:
            until_lost: Union[Selector, List[Selector]] = None,
            empty: Callable = None,
            reload: Callable = None):
-
-        @catch.timeoutException(lambda: self.browser.refresh())
-        def go_to_url():
-            self.browser.go(url, until=until, until_lost=until_lost, empty=empty, reload=reload)
-
         while 1:
-            go_to_url()
+            self.browser.go(url, until=until, until_lost=until_lost, empty=empty, reload=reload)
             if self.user.is_logged_in():
                 break
             else:
@@ -183,9 +181,9 @@ class Grabber:
             current = self.match_grid.get_current_sub_tab_name()
             sub_tabs_name_list = odds_tabs[tab_name]
             if current in sub_tabs_name_list:
-                return [current] + [i for i in sub_tabs_name_list if (i != current and i in subTabs)]
+                return [current] + [i for i in sub_tabs_name_list if (i != current and i in sub_tabs)]
             else:
-                return [i for i in sub_tabs_name_list if i in subTabs]
+                return [i for i in sub_tabs_name_list if i in sub_tabs]
 
         def is_reached_tab():
             return self.match_grid.get_current_tab_name() == tab_name
@@ -218,20 +216,19 @@ class Grabber:
             match.filled_odds = True
             return
 
-        @catch.timeoutException(lambda: self.browser.refresh())
-        def click(loc):
-            self.browser.click(loc, until=[self.match_grid.is_loaded_grid, is_reached_tab],
-                               reload=self.match_grid.is_reload)
-
         tabs = self.match_grid.get_tabs()
         for tab_name in get_tabs_name_list():
             if not is_reached_tab():
-                click(tabs[tab_name])
+                self.browser.click(tabs[tab_name],
+                                   until=[self.match_grid.is_loaded_grid, is_reached_tab],
+                                   reload=self.match_grid.is_reload)
 
-            subTabs = self.match_grid.get_sub_tabs()
+            sub_tabs = self.match_grid.get_sub_tabs()
             for sub_tab_name in get_sub_tabs_name_list():
                 if not is_reached_sub_tab():
-                    click(tabs[tab_name])
+                    self.browser.click(sub_tabs[sub_tab_name],
+                                       until=[self.match_grid.is_loaded_grid, is_reached_tab, is_reached_sub_tab],
+                                       reload=self.match_grid.is_reload)
 
                 match.odds[tab_name][sub_tab_name] = self.match_grid.grab(tab_name)
 

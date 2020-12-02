@@ -35,11 +35,11 @@ class User(object):
         def until_btn():
             return self.browser.is_on_page(user_page.login_btn) or self.browser.is_on_page(user_page.logout_btn)
 
-        cookiePath = io.correct_file_name([names.cookie_path, 'oddsportal_cookies.pkl'])
+        cookie_path = io.path([names.cookie_path, 'oddsportal_cookies.pkl'])
         if self.is_logged_in():
             return
 
-        cookies = io.load_pickle(cookiePath)
+        cookies = io.load_pickle(cookie_path)
         if cookies:
             self.browser.set_cookies(cookies)
             self.browser.refresh(until=until_btn)
@@ -62,7 +62,7 @@ class User(object):
         assert self.is_logged_in()
 
         cookies = self.browser.get_cookies()
-        io.save_pickle(cookiePath, cookies)
+        io.save_pickle(cookie_path, cookies)
 
     def logout(self):
 

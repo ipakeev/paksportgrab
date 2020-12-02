@@ -66,29 +66,29 @@ def test_grid(match: Match):
     assert 1.6 <= odds['1'] <= 2.0
     assert 3.3 <= odds['X'] <= 3.6
     assert 4.5 <= odds['2'] <= 4.9
-    assert 9 <= odds['bk_num'] <= 15
+    assert 2 <= odds['bk_num'] <= 4
 
     odds = match.odds[names.tab.WDL][names.sub_tab.h1]
     assert 2.25 <= odds['1'] <= 2.6
     assert 1.9 <= odds['X'] <= 2.25
-    assert 4.8 <= odds['2'] <= 5.3
-    assert 6 <= odds['bk_num'] <= 12
+    assert 5.0 <= odds['2'] <= 5.5
+    assert 2 <= odds['bk_num'] <= 4
 
     odds = match.odds[names.tab.handicap][names.sub_tab.ft][0]
     assert 1.2 <= odds['1'] <= 1.45
     assert 3.2 <= odds['2'] <= 3.7
-    assert 4 <= odds['bk_num'] <= 8
-    assert 15 <= len(match.odds[names.tab.handicap][names.sub_tab.ft]) <= 20
+    assert 2 <= odds['bk_num'] <= 4
+    assert 11 <= len(match.odds[names.tab.handicap][names.sub_tab.ft]) <= 13
 
     odds = match.odds[names.tab.total][names.sub_tab.ft][2.5]
     assert 2.1 <= odds['over'] <= 2.4
     assert 1.55 <= odds['under'] <= 1.8
-    assert 8 <= odds['bk_num'] <= 12
+    assert 2 <= odds['bk_num'] <= 4
 
     odds = match.odds[names.tab.total][names.sub_tab.h1][1]
     assert 2.05 <= odds['over'] <= 2.3
     assert 1.6 <= odds['under'] <= 1.85
-    assert 2 <= odds['bk_num'] <= 5
+    assert 1 <= odds['bk_num'] <= 2
 
-    assert 10 <= len(match.odds[names.tab.total][names.sub_tab.ft]) <= 15
-    assert 4 <= len(match.odds[names.tab.total][names.sub_tab.h1]) <= 8
+    assert 10 <= len(match.odds[names.tab.total][names.sub_tab.ft]) <= 12
+    assert 4 <= len(match.odds[names.tab.total][names.sub_tab.h1]) <= 6

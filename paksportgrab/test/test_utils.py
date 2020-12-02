@@ -60,15 +60,13 @@ def test_sport_name():
 def test_match_tab_name():
     assert utils.get_match_tab_name('Over/Under') == names.tab.total
     assert utils.get_match_tab_name('') is None
-    with pytest.raises(KeyError):
-        utils.get_match_tab_name('ou')
+    assert utils.get_match_tab_name('ou') is None
 
 
 def test_match_sub_tab_name():
     assert utils.get_match_sub_tab_name('Full Time') == names.sub_tab.ft
     assert utils.get_match_sub_tab_name('') is None
-    with pytest.raises(KeyError):
-        utils.get_match_sub_tab_name('ft')
+    assert utils.get_match_sub_tab_name('ft') is None
 
 
 def test_match_id():

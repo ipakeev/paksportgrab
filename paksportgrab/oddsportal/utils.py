@@ -1,7 +1,7 @@
 import datetime
 from typing import List, Optional
 
-from paklib import io
+from paklib import io, dt
 
 from .config import names
 from .config.selector import re_compiled
@@ -42,7 +42,7 @@ def get_match_id(url: str) -> str:
 
 def get_date_sport_url(sport: str, date: datetime.date) -> str:
     # -> 'https://www.oddsportal.com/matches/sport/date/'
-    return io.correct_file_name([names.base_url, 'matches', sport, date.strftime('%Y%m%d')]) + '/'
+    return io.path([names.base_url, 'matches', sport, dt.string_from_date(date)]) + '/'
 
 
 def get_date_from_string(s: str) -> datetime.date:

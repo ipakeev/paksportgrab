@@ -13,7 +13,7 @@ def sport():
 
 @pytest.fixture(scope='module')
 def date():
-    return datetime.date(2020, 9, 3)
+    return datetime.date(2020, 12, 2)
 
 
 @pytest.fixture(scope='class')
@@ -44,15 +44,15 @@ class TestSportGrid:
         assert not sportGrid.is_switched_to_kick_off_time()
 
     def test_sport(self, leagues):
-        assert len(leagues) == 5
+        assert len(leagues) == 3
 
     def test_league(self, leagues, sport):
         league = leagues[2]
         assert league.sport == sport
-        assert league.country == 'South Korea'
-        assert league.league == 'KBO'
-        assert league.league_url == 'https://www.oddsportal.com/baseball/south-korea/kbo/results/'
-        assert len(league.next_matches) == 5
+        assert league.country == 'Venezuela'
+        assert league.league == 'LVBP'
+        assert league.league_url == 'https://www.oddsportal.com/baseball/venezuela/lvbp/results/'
+        assert len(league.next_matches) == 2
 
     def test_match(self, leagues, date):
         league = leagues[2]
@@ -62,13 +62,13 @@ class TestSportGrid:
         assert match.league == league.league
 
         assert match.date == date
-        assert match.time == datetime.time(12, 30)
-        assert match.teams == ['LG Twins', 'NC Dinos']
-        assert match.url == 'https://www.oddsportal.com/baseball/south-korea/kbo/lg-twins-nc-dinos-z5aH7qtI/'
-        assert match.id == 'z5aH7qtI'
-        assert match.score_string == '6:5'
+        assert match.time == datetime.time(1, 0)
+        assert match.teams == ['Zulia', 'Magallanes']
+        assert match.url == 'https://www.oddsportal.com/baseball/venezuela/lvbp/zulia-magallanes-2gxWqk65/'
+        assert match.id == '2gxWqk65'
+        assert match.score_string == '0:1'
         assert match.odds == {}
-        assert 11 <= match.bk_num <= 16
+        assert 2 <= match.bk_num <= 4
         assert match.finished
 
     def test_matchSets(self, leagues):

@@ -119,7 +119,7 @@ class TestTillPage3:
         assert match.id == 'QVBrfakT'
         assert match.score_string == '2:0'
         assert match.odds == {}
-        assert 10 <= match.bk_num <= 14
+        assert 2 <= match.bk_num <= 4
         assert match.finished
 
     def test_lastMatch(self, matches_tillPage3: List[Match]):
@@ -133,7 +133,7 @@ class TestTillPage3:
         assert match.id == 'xGt8WUHH'
         assert match.score_string == '1:0'
         assert match.odds == {}
-        assert 10 <= match.bk_num <= 14
+        assert 2 <= match.bk_num <= 4
         assert match.finished
 
 
