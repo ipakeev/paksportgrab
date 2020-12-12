@@ -199,6 +199,11 @@ class Grabber:
         match.score_string = self.match_grid.get_result()
         match.score = None
 
+        if match.score_string == 'Canceled':
+            match.set_canceled()
+            match.score_string = None
+            return
+
         if match.score_string:
             match.set_finished()
             match.filled_score = True

@@ -64,6 +64,8 @@ class MatchGrid(Grid):
         pe = self.browser.find_element(match_page.result)
         if 'Final result' in pe.text:
             return pe.text.replace('Final result', '').strip()
+        if pe.text == 'Canceled':
+            return 'Canceled'
         return None
 
     def get_current_tab_name(self) -> str:
